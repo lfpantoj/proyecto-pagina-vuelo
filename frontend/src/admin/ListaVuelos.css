@@ -1,0 +1,110 @@
+.pasajeros-container {
+  padding: 30px;
+  background-color: #f9fafb;
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+}
+
+h2, h3 {
+  text-align: center;
+  color: #0b344f;
+}
+
+.form-pasajero {
+  background-color: #fff;
+  padding: 25px;
+  max-width: 600px;
+  margin: 20px auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.btn-registrar {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  background-color: #145374;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn-registrar:hover {
+  background-color: #0b344f;
+}
+
+.tabla-container {
+  overflow-x: auto;
+}
+
+.tabla-pasajeros {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+.tabla-pasajeros th, .tabla-pasajeros td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.tabla-pasajeros th {
+  background-color: #145374;
+  color: white;
+}
+
+.btn-eliminar {
+  background-color: #c0392b;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-eliminar:hover {
+  background-color: #a93226;
+}
+
+.btn-volver {
+  display: block;
+  width: fit-content;
+  margin: 30px auto;
+  background-color: #0b344f;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.btn-volver:hover {
+  background-color: #145374;
+}
+
+@media (max-width: 768px) {
+  .form-pasajero, .tabla-pasajeros {
+    width: 95%;
+  }
+
+  .tabla-pasajeros th, .tabla-pasajeros td {
+    font-size: 14px;
+    padding: 8px;
+  }
+}

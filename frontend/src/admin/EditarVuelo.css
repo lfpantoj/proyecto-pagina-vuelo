@@ -1,0 +1,58 @@
+.editar-container {
+  padding: 30px;
+  background-color: #f7fafc;
+  font-family: "Poppins", sans-serif;
+  min-height: 100vh;
+}
+
+h2 {
+  text-align: center;
+  color: #0b344f;
+}
+
+.form-vuelo {
+  max-width: 500px;
+  margin: 20px auto;
+  background-color: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  color: #333;
+  font-weight: 600;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.btn-guardar {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  background-color: #0b344f;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn-guardar:hover {
+  background-color: #145374;
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  .form-vuelo {
+    width: 90%;
+  }
+}

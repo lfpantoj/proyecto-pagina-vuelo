@@ -1,38 +1,87 @@
+/* Estilos generales del sistema de gestión de vuelos */
+
+/* Contenedor principal */
 .App {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+  background-color: #f9f9f9;
   min-height: 100vh;
+}
+
+/* Barra de navegación */
+.navbar {
+  background-color: #005f73;
+  color: white;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+}
+
+.navbar h1 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  margin: 0.5rem;
+  font-weight: bold;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
+
+/* Contenedor de contenido principal */
+.main-container {
+  padding: 20px;
+}
+
+/* Botones generales */
+button,
+.btn-editar,
+.btn-eliminar,
+.btn-crear {
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-editar {
+  background-color: #2980b9;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.btn-editar:hover {
+  background-color: #21618c;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+.btn-eliminar {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.btn-eliminar:hover {
+  background-color: #c0392b;
+}
+
+.btn-crear {
+  background-color: #27ae60;
+  color: white;
+}
+
+.btn-crear:hover {
+  background-color: #1e8449;
+}
+
+/* Diseño responsivo */
+@media (min-width: 700px) {
+  .navbar {
+    flex-direction: row;
+    justify-content: space-between;
   }
 }

@@ -1,0 +1,44 @@
+.admin-dashboard {
+  text-align: center;
+  padding: 40px;
+  font-family: "Poppins", sans-serif;
+}
+
+h1 {
+  color: #0b344f;
+  font-size: 1.8rem;
+}
+
+p {
+  color: #444;
+  margin-bottom: 20px;
+}
+
+.admin-menu {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 40px;
+}
+
+.btn-admin {
+  background-color: #0b344f;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.btn-admin:hover {
+  background-color: #164c70;
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  .btn-admin {
+    width: 80%;
+  }
+}

@@ -1,0 +1,163 @@
+.gestion-container {
+  padding: 30px;
+  font-family: "Poppins", sans-serif;
+  background-color: #f5f8fb;
+  min-height: 100vh;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+header h2 {
+  color: #0b344f;
+  font-size: 1.8rem;
+}
+
+header p {
+  color: #5a5a5a;
+  margin-top: 5px;
+}
+
+.btn-nuevo {
+  display: inline-block;
+  margin-top: 15px;
+  background-color: #0b344f;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.btn-nuevo:hover {
+  background-color: #164c70;
+}
+
+/* Tabla */
+.tabla-container {
+  overflow-x: auto;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+}
+
+.tabla-vuelos {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+
+.tabla-vuelos th, .tabla-vuelos td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.tabla-vuelos th {
+  background-color: #0b344f;
+  color: white;
+}
+
+.tabla-vuelos tr:hover {
+  background-color: #f0f4f8;
+}
+
+/* Botones */
+.btn-editar, .btn-eliminar {
+  border: none;
+  padding: 8px 12px;
+  margin: 0 4px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.btn-editar {
+  background-color: #0b344f;
+  color: white;
+}
+
+.btn-editar:hover {
+  background-color: #164c70;
+}
+
+.btn-eliminar {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.btn-eliminar:hover {
+  background-color: #c0392b;
+}
+
+/* 📱 Responsivo */
+@media (max-width: 768px) {
+  header h2 {
+    font-size: 1.4rem;
+  }
+
+  .tabla-vuelos {
+    font-size: 0.9rem;
+  }
+
+  .btn-editar, .btn-eliminar {
+    padding: 6px 10px;
+  }
+
+  .btn-nuevo {
+    width: 80%;
+  }
+}
+.busqueda-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.input-busqueda {
+  flex: 1;
+  min-width: 250px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .busqueda-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .input-busqueda {
+    width: 100%;
+  }
+
+  .btn-nuevo {
+    width: 100%;
+    text-align: center;
+  }
+}
+/* Botón "Ver Pasajeros" */
+.btn-ver {
+  background-color: #16a085;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  margin-right: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-ver:hover {
+  background-color: #117a65;
+}

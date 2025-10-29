@@ -1,0 +1,83 @@
+/* src/admin/ListaPasajeros.css */
+
+.pasajeros-container {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 2rem auto;
+}
+
+.form-pasajero {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.form-pasajero input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.btn-agregar {
+  background-color: #00796b;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-agregar:hover {
+  background-color: #004d40;
+}
+
+.tabla-pasajeros {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla-pasajeros th,
+.tabla-pasajeros td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+.btn-eliminar {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-eliminar:hover {
+  background-color: #c0392b;
+}
+
+.btn-volver {
+  background-color: #005f73;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.btn-volver:hover {
+  background-color: #003f49;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+  .form-pasajero {
+    flex-direction: column;
+  }
+}
