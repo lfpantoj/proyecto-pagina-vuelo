@@ -3,17 +3,17 @@
 import { filterInput } from './validators';
 
 /**
- * Creates a standardized change handler function for form inputs
- * This higher-order function generates event handlers that manage form state updates,
- * input filtering, and error clearing in a consistent manner across the application.
+ * Crea una función de controlador de cambios estandarizada para las entradas de formularios.
+ * Esta función de orden superior genera controladores de eventos que gestionan las actualizaciones del estado del formulario,
+ * el filtrado de entradas y la eliminación de errores de manera coherente en toda la aplicación.
  * 
- * The handler automatically filters input values based on field type and clears
- * relevant error states when users modify form fields.
+ * El controlador filtra automáticamente los valores de entrada según el tipo de campo y borra los estados
+ * de error relevantes cuando los usuarios modifican los campos del formulario.
  * 
- * @param {Function} setForm - State setter function for form data
- * @param {Function} setError - State setter function for global form errors
- * @param {Function} setFieldErrors - State setter function for field-specific errors
- * @returns {Function} Event handler function for form input changes
+ * @param {Function} setForm - Función para establecer el estado de los datos del formulario
+ * @param {Function} setError - Función de configuración de estado para errores de formulario globales
+ * @param {Function} setFieldErrors - Función de configuración de estado para errores específicos del campo
+ * @returns {Function} Función de controlador de eventos para cambios en la entrada del formulario
  */
 export const createChangeHandler = (setForm, setError, setFieldErrors) => (e, fieldType = null) => {
   const { name, value } = e.target;
@@ -25,7 +25,7 @@ export const createChangeHandler = (setForm, setError, setFieldErrors) => (e, fi
 
   setForm(prev => ({ ...prev, [name]: filteredValue }));
   
-  // Clear error states on user input
+    // Borrar estados de error en la entrada del usuario
   if (setError) setError("");
   if (setFieldErrors) {
     setFieldErrors(prev => ({ ...prev, [name]: '' }));
@@ -33,18 +33,18 @@ export const createChangeHandler = (setForm, setError, setFieldErrors) => (e, fi
 };
 
 /**
- * Determines appropriate CSS classes for form fields based on validation state
- * This function applies dynamic styling to form inputs to provide visual feedback
- * about field validation status (normal, error, or success states).
+ * Determina las clases CSS apropiadas para los campos del formulario en función del estado de validación.
+ * Esta función aplica estilos dinámicos a las entradas del formulario para proporcionar información visual
+ * sobre el estado de validación del campo (estado normal, de error o de éxito).
  * 
- * The function only applies validation styling after form submission to avoid
- * premature visual feedback during user input.
+ * La función solo aplica el estilo de validación después del envío del formulario
+ * para evitar la retroalimentación visual prematura durante la entrada de datos del usuario.
  * 
- * @param {string} fieldName - Name identifier of the form field
- * @param {string} value - Current value of the form field
- * @param {boolean} submitted - Whether the form has been submitted
- * @param {Object} fieldErrors - Object containing field-specific error messages
- * @returns {string} CSS class string for the form field
+ * @param {string} fieldName - Identificador de nombre del campo del formulario
+ * @param {string} value - Valor actual del campo del formulario
+ * @param {boolean} submitted - Si el formulario ha sido enviado
+ * @param {Object} fieldErrors - Objeto que contiene mensajes de error específicos del campo
+ * @returns {string} Cadena de clase CSS para el campo del formulario
  */
 export const getFieldClass = (fieldName, value, submitted, fieldErrors) => {
   if (!submitted) return "form-input";
@@ -54,7 +54,7 @@ export const getFieldClass = (fieldName, value, submitted, fieldErrors) => {
     return "form-input form-input--error";
   }
   
-  // Only show success state for fields with value and no errors
+  // Mostrar solo el estado de éxito para los campos con valor y sin errores.
   if (value && !error) {
     return "form-input form-input--success";
   }

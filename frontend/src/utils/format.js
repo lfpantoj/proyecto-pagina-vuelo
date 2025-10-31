@@ -1,23 +1,23 @@
 // src/utils/format.js
 
 /**
- * Formats numeric values into localized currency strings
- * This utility function leverages the Internationalization API to convert
- * numeric values into properly formatted currency strings according to
- * specified locale and currency conventions.
+ * Da formato a valores numéricos en cadenas de moneda localizadas.
+ * Esta función de utilidad aprovecha la API de internacionalización para convertir
+ * valores numéricos en cadenas de moneda con el formato adecuado según las convenciones
+ * de configuración regional y de moneda especificadas.
  * 
- * The function provides consistent currency formatting throughout the
- * application and includes null safety for robust error handling.
+ * La función proporciona un formato de moneda uniforme en toda la aplicación
+ * e incluye seguridad contra valores nulos para un manejo de errores robusto.
  * 
- * @param {number|null|undefined} value - Numeric value to format as currency
- * @param {string} locale - BCP 47 language tag for localization (default: "es-CO")
- * @param {string} currency - ISO 4217 currency code (default: "COP")
- * @returns {string} Formatted currency string or "-" for null/undefined values
+ * @param {number|null|undefined} value - Valor numérico a formatear como moneda
+ * @param {string} locale - Etiqueta de idioma BCP 47 para localización (predeterminado: "es-CO")
+ * @param {string} currency - Código de moneda ISO 4217 (predeterminado: "COP")
+ * @returns {string} Cadena de moneda formateada o "-" para valores nulos/indefinidos
  * 
  * @example
- * formatCurrency(500000) // returns "$500.000"
- * formatCurrency(75000, "en-US", "USD") // returns "$75,000.00"
- * formatCurrency(null) // returns "-"
+ * formatCurrency(500000) // devuelve "$500.000"
+ * formatCurrency(75000, "en-US", "USD") // devuelve "$75,000.00"
+ * formatCurrency(null) // devuelve "-"
  */
 export function formatCurrency(value, locale = "es-CO", currency = "COP") {
   if (value == null) return "-";

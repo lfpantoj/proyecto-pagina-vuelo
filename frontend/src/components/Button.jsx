@@ -1,40 +1,26 @@
 // components/Button.jsx
-import React from "react";
 
 /**
- * A reusable button component that provides consistent styling and behavior
- * across the application. Supports multiple variants, loading states, and
- * standard HTML button attributes.
- * 
- * This component encapsulates button styling and behavior, ensuring visual
- * consistency while maintaining accessibility standards.
- * 
- * @param {Object} props - Component properties
- * @param {ReactNode} props.children - Button content (text, icons, etc.)
- * @param {string} props.variant - Visual style variant: 'primary' | 'secondary'
- * @param {string} props.type - HTML button type: 'button' | 'submit' | 'reset'
- * @param {boolean} props.disabled - Whether the button is disabled
- * @param {boolean} props.loading - Whether the button is in loading state
- * @param {Object} props.props - Additional HTML button attributes
- * @returns {JSX.Element} Rendered button component
+ * Componente de botón reutilizable que acepta múltiples propiedades
+ * y maneja diferentes estados visuales y de interacción
  */
-export default function Button({ 
-  children, 
-  variant = "primary", 
-  type = "button",
-  disabled = false,
-  loading = false,
-  ...props 
+export default function Button({
+    children,
+    variant = "primary",      // Define el estilo visual del botón
+    type = "button",          // Especifica el tipo HTML del botón  
+    disabled = false,         // Controla el estado deshabilitado
+    loading = false,          // Indica estado de carga
+    ...props                  // Propiedades adicionales
 }) {
-  return (
-    <button
-      type={type}
-      className={`form-btn form-btn--${variant}`}
-      disabled={disabled || loading}
-      {...props}
-    >
-      {loading && <span className="form-spinner"></span>}
-      {children}
-    </button>
-  );
+    return (
+        <button
+            type={type}
+            className={`btn btn--${variant}`}
+            disabled={disabled || loading}
+            {...props}
+        >
+            {loading && <span className="btn-spinner"></span>}
+            {children}
+        </button>
+    );
 }

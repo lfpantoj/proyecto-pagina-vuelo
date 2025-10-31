@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\frontend",
+    "\\frontend\\src",
+    "\\frontend\\src\\assets",
+    "\\frontend\\src\\data",
+    "\\frontend\\src\\hooks",
+    "\\frontend\\src\\pages",
+    "\\frontend\\src\\pages\\Admin",
+    "\\frontend\\src\\pages\\Auth",
+    "\\frontend\\src\\utils"
+  ],
+  "SelectedNode": "\\frontend\\src\\App.css",
+  "PreviewInSolutionExplorer": false
+}

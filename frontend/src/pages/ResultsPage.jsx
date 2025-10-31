@@ -5,144 +5,121 @@ import { useAuth } from "../context/AuthContext";
 import { flights } from "../data/flights";
 import Button from "../components/Button";
 import { formatCurrency } from "../utils/format";
+import { hasCompleteProfile } from "../utils/validators";
 
 /**
- * Validates if a user has a complete profile with all required information
- * Checks for presence and format of essential user data fields required for reservations
+ * Componente de página de resultados de búsqueda de vuelos que muestra opciones filtradas según los criterios de búsqueda del usuario.
+ * Esta página muestra los vuelos disponibles que coinciden con los parámetros de búsqueda y gestiona el proceso de reserva,
+ * incluyendo la autenticación del usuario y la validación de que el perfil esté completo.
  * 
- * @param {Object} user - User object from authentication context
- * @returns {boolean} True if user has complete profile data, false otherwise
- */
-const hasCompleteProfile = (user) => {
-  if (!user) return false;
-  
-  return (
-    user.documento &&
-    user.nombre &&
-    user.correo &&
-    user.celular &&
-    user.nacimiento &&
-    user.documento.length >= 6 &&
-    user.nombre.split(' ').length >= 2 && // At least first name and last name
-    user.celular.length >= 10 &&
-    user.nacimiento.length === 10 // YYYY-MM-DD format
-  );
-};
-
-/**
- * Flight search results page component that displays filtered flight options
- * based on user search criteria. This page shows available flights matching
- * the search parameters and handles the reservation initiation process with
- * user authentication and profile completeness validation.
+ * El componente implementa un proceso de validación de varios pasos para las reservas,
+ * asegurando que los usuarios estén autenticados y tengan perfiles completos antes de continuar.
  * 
- * The component implements a multi-step validation process for reservations
- * ensuring users are authenticated and have complete profiles before proceeding.
- * 
- * @returns {JSX.Element} Rendered flight results page with search outcomes and booking options
+ * @returns {JSX.Element} Página con resultados de búsqueda y opciones de reserva.
  */
 export default function ResultsPage() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { user } = useAuth();
-  const search = location.state || {};
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { user } = useAuth();
+    const search = location.state || {};
 
-  /**
-   * Extracts search parameters from navigation state with default values
-   */
-  const { origen = "", destino = "", fechaIda = "" } = search;
+    /**
+     * Extrae los parámetros de búsqueda del estado de navegación con valores predeterminados.
+     */
+    const { origen = "", destino = "", fechaIda = "" } = search;
 
-  /**
-   * Filters available flights based on search criteria
-   * Matches flights by origin, destination, and departure date
-   */
-  const filtered = flights.filter(
-    (f) => f.origen === origen && f.destino === destino && f.fecha === fechaIda
-  );
+    /**
+     * Filtra los vuelos disponibles según los criterios de búsqueda.
+     * Busca vuelos por origen, destino y fecha de salida.
+     */
+    const filtered = flights.filter(
+        (f) => f.origen === origen && f.destino === destino && f.fecha === fechaIda
+    );
 
-  /**
-   * Handles flight reservation initiation with user validation
-   * Implements a three-step validation process:
-   * 1. User authentication check
-   * 2. Profile completeness validation
-   * 3. Reservation confirmation navigation
-   * 
-   * @param {Object} vuelo - Flight object selected for reservation
-   */
-  const reservar = (vuelo) => {
-    // Step 1: Verify user authentication
-    if (!user) {
-      navigate("/login", { 
-        state: { 
-          redirectTo: "/confirmar-reserva",
-          vuelo: vuelo,
-          message: "Por favor inicia sesión para realizar la reserva"
-        } 
-      });
-    } 
-    // Step 2: Verify user profile completeness
-    else if (!hasCompleteProfile(user)) {
-      navigate("/editar-perfil", { 
-        state: { 
-          returnTo: "/confirmar-reserva",
-          vuelo: vuelo,
-          message: "Por favor completa tus datos antes de reservar",
-          requireCompleteProfile: true
-        } 
-      });
-    }
-    // Step 3: Proceed to reservation confirmation
-    else {
-      navigate("/confirmar-reserva", { state: { vuelo } });
-    }
-  };
+    /**
+     * Gestiona el inicio de la reserva de vuelos con validación de usuario.
+     * Implementa un proceso de validación de tres pasos:
+     * 1. Comprobación de la autenticación del usuario.
+     * 2. Validación de que el perfil esté completo.
+     * 3. Confirmación de la reserva.
+     * 
+     * @param {Object} vuelo - Objeto de vuelo seleccionado para reserva
+     */
+    const reservar = (vuelo) => {
+        // Paso 1: Verificar la autenticación del usuario
+        if (!user) {
+            navigate("/login", {
+                state: {
+                    redirectTo: "/confirmar-reserva",
+                    vuelo: vuelo,
+                    message: "Por favor inicia sesión para realizar la reserva"
+                }
+            });
+        }
+        // Paso 2: Verificar que el perfil del usuario esté completo mediante un validador centralizado.
+        else if (!hasCompleteProfile(user)) {
+            navigate("/editar-perfil", {
+                state: {
+                    returnTo: "/confirmar-reserva",
+                    vuelo: vuelo,
+                    message: "Por favor completa tus datos antes de reservar",
+                    requireCompleteProfile: true
+                }
+            });
+        }
+        // Paso 3: Proceda a la confirmación de la reserva
+        else {
+            navigate("/confirmar-reserva", { state: { vuelo } });
+        }
+    };
 
-  return (
-    <main className="page">
-      <h1>Resultados</h1>
-      <p className="muted">
-        {origen} → {destino} • {fechaIda}
-      </p>
+    return (
+        <main className="page">
+            <h1>Resultados</h1>
+            <p className="muted">
+                {origen} → {destino} • {fechaIda}
+            </p>
 
-      {/* Results state handling: empty results vs. flight listing */}
-      {filtered.length === 0 ? (
-        <div className="empty">
-          <p>No se encontraron vuelos para esa ruta.</p>
-          <Button variant="secondary" onClick={() => navigate("/")}>
-            Volver a buscar
-          </Button>
-        </div>
-      ) : (
-        <table className="results-table" aria-label="Resultados de vuelos">
-          <thead>
-            <tr>
-              <th>Número</th>
-              <th>Aerolínea</th>
-              <th>Fecha</th>
-              <th>Salida</th>
-              <th>Llegada</th>
-              <th>Precio</th>
-              <th>Asientos</th>
-              <th>Acción</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((v) => (
-              <tr key={v.id}>
-                <td>{v.id}</td>
-                <td>{v.aerolinea}</td>
-                <td>{v.fecha}</td>
-                <td>{v.salida}</td>
-                <td>{v.llegada}</td>
-                <td>{formatCurrency(v.precio)}</td>
-                <td>{v.asientos}</td>
-                <td>
-                  <Button onClick={() => reservar(v)}>Reservar</Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-    </main>
-  );
+            {/* Gestión del estado de los resultados: resultados vacíos frente a listado de vuelos */}
+            {filtered.length === 0 ? (
+                <div className="empty">
+                    <p>No se encontraron vuelos para esa ruta.</p>
+                    <Button variant="secondary" onClick={() => navigate("/")}>
+                        Volver a buscar
+                    </Button>
+                </div>
+            ) : (
+                <table className="results-table" aria-label="Resultados de vuelos">
+                    <thead>
+                        <tr>
+                            <th>Número</th>
+                            <th>Aerolínea</th>
+                            <th>Fecha</th>
+                            <th>Salida</th>
+                            <th>Llegada</th>
+                            <th>Precio</th>
+                            <th>Asientos</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filtered.map((v) => (
+                            <tr key={v.id}>
+                                <td>{v.id}</td>
+                                <td>{v.aerolinea}</td>
+                                <td>{v.fecha}</td>
+                                <td>{v.salida}</td>
+                                <td>{v.llegada}</td>
+                                <td>{formatCurrency(v.precio)}</td>
+                                <td>{v.asientos}</td>
+                                <td>
+                                    <Button onClick={() => reservar(v)}>Reservar</Button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            )}
+        </main>
+    );
 }

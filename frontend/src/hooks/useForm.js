@@ -4,27 +4,27 @@ import { validateForm } from "../utils/validationSchemas";
 import { createChangeHandler } from "../utils/formHelpers";
 
 /**
- * Custom React hook for managing form state, validation, and submission.
- * This hook provides a comprehensive form management solution including
- * state handling, validation, error management, and submission lifecycle.
+ * Hook personalizado de React para gestionar el estado, la validación y el envío de formularios. 
+ * Este hook proporciona una solución integral de gestión de formularios que incluye el 
+ * manejo del estado, la validación, la gestión de errores y el ciclo de vida del envío.
  * 
- * The hook integrates with validation schemas and form helpers to create
- * a consistent form handling pattern across the application.
+ * El hook se integra con los esquemas de validación y los helpers de formularios para crear 
+ * un patrón de manejo de formularios consistente en toda la aplicación.
  * 
- * @param {Object} initialState - Initial form state values
- * @param {Object} schema - Validation schema object for form validation
- * @param {Function} onSubmitCallback - Async callback function to execute on form submission
- * @returns {Object} Form management utilities and state
- * @returns {Object} return.form - Current form state values
- * @returns {string} return.error - Global form error message
- * @returns {boolean} return.loading - Form submission loading state
- * @returns {boolean} return.submitted - Whether form has been submitted
- * @returns {Object} return.fieldErrors - Validation errors per field
- * @returns {Function} return.handleChange - Change handler for form inputs
- * @returns {Function} return.handleSubmit - Submission handler for forms
- * @returns {Function} return.resetForm - Function to reset form to initial state
- * @returns {Function} return.setForm - Function to manually set form state
- * @returns {Function} return.setError - Function to manually set error state
+ * @param {Object} initialState - valores de estado de forma inicial
+ * @param {Object} schema - Objeto de esquema de validación para la validación de formularios
+ * @param {Function} onSubmitCallback - Función de devolución de llamada asíncrona que se ejecutará al enviar el formulario
+ * @returns {Object} utilidades de gestión de formularios y estado
+ * @returns {Object} return.form - Valores del estado actual del formulario
+ * @returns {string} return.error - Mensaje de error global del formulario
+ * @returns {boolean} return.loading - Estado de carga del envío del formulario
+ * @returns {boolean} return.submitted - Indica si el formulario se ha enviado.
+ * @returns {Object} return.fieldErrors - Errores de validación por campo
+ * @returns {Function} return.handleChange - Controlador de cambios para entradas de formulario
+ * @returns {Function} return.handleSubmit - Controlador de envío para formularios
+ * @returns {Function} return.resetForm - Función para restablecer el formulario a su estado inicial
+ * @returns {Function} return.setForm - Función para establecer manualmente el estado del formulario
+ * @returns {Function} return.setError - Función para establecer manualmente el estado de error
  */
 export const useForm = (initialState, schema, onSubmitCallback) => {
   const [form, setForm] = useState(initialState);
@@ -34,17 +34,17 @@ export const useForm = (initialState, schema, onSubmitCallback) => {
   const [fieldErrors, setFieldErrors] = useState({});
 
   /**
-   * Handles form input changes with integrated error clearing
-   * Uses the createChangeHandler utility for consistent behavior
+   * Gestiona los cambios introducidos en los formularios con borrado de errores integrado.
+   * Utiliza la utilidad createChangeHandler para un comportamiento coherente.
    */
   const handleChange = createChangeHandler(setForm, setError, setFieldErrors);
 
   /**
-   * Handles form submission with validation and error management
-   * Validates form against provided schema, manages loading states,
-   * and executes the submission callback upon successful validation
+   * Gestiona el envío de formularios con validación y control de errores.
+   * Valida el formulario según el esquema proporcionado, gestiona los estados
+   * de carga y ejecuta la función de devolución de llamada tras una validación exitosa.
    * 
-   * @param {Event} e - Form submission event
+   * @param {Event} e - evento de envío de formularios
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -71,8 +71,8 @@ export const useForm = (initialState, schema, onSubmitCallback) => {
   };
 
   /**
-   * Resets the form to its initial state
-   * Clears all form values, errors, loading states, and submission flags
+   * Restablece el formulario a su estado inicial.
+   * Borra todos los valores del formulario, errores, estados de carga e indicadores de envío.
    */
   const resetForm = () => {
     setForm(initialState);
