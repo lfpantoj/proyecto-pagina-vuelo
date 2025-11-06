@@ -1,51 +1,84 @@
-// src/App.js - VERSIÓN CORREGIDA
+// src/App.js
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Header from "./components/Header";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 
-// Main application pages
+// Páginas principales de la aplicación
 import SearchPage from "./pages/SearchPage";
 import ResultsPage from "./pages/ResultsPage";
 import ReservationConfirm from "./pages/ReservationConfirm";
 import ReservationSuccess from "./pages/ReservationSuccess";
 import ProfileEdit from "./pages/ProfileEdit";
 
-// Authentication pages
+// Páginas de autenticación
 import LoginPage from "./pages/Auth/LoginPage";
 import RegisterPage from "./pages/Auth/RegisterPage";
 
-// Consolidated global styles
+// Páginas de administrador
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+import FlightsManagement from "./pages/Admin/FlightsManagement";
+import FlightEdit from "./pages/Admin/FlightEdit";
+import PassengersList from "./pages/Admin/PassengersList";
+
+// Estilos globales consolidados
 import "./App.css";
 
 /**
- * Protected route component that restricts access to authenticated users only
- * Wraps route components and redirects unauthenticated users to login page
- * Displays loading state during authentication verification
+ * Componente de ruta protegida que restringe el acceso solo a usuarios autenticados
+ * Envuelve componentes de ruta y redirige usuarios no autenticados a la página de login
+ * Muestra estado de carga durante la verificación de autenticación
  * 
- * @param {Object} props - Component properties
- * @param {ReactNode} props.children - Child components to render if authenticated
- * @returns {JSX.Element} Protected route component or redirect
+ * @param {Object} props - Propiedades del componente
+ * @param {ReactNode} props.children - Componentes hijos a renderizar si está autenticado
+ * @returns {JSX.Element} Componente de ruta protegida o redirección
  */
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
   
+  // Mostrar estado de carga durante la verificación
   if (loading) {
     return <div className="page">Cargando...</div>;
   }
   
+  // Redirigir a login si no hay usuario autenticado
   return user ? children : <Navigate to="/login" />;
 };
 
 /**
- * Main application content component with routing configuration
- * Defines the application's route structure and wraps content with authentication context
- * Implements protected routes for authenticated-only sections of the application
+ * Componente de ruta protegida para administradores
+ * Restringe el acceso solo a usuarios con rol de administrador
  * 
- * @returns {JSX.Element} Application content with routing and layout structure
+ * @param {Object} props - Propiedades del componente
+ * @param {ReactNode} props.children - Componentes hijos a renderizar si es admin
+ * @returns {JSX.Element} Componente de ruta protegida o redirección
+ */
+const AdminRoute = ({ children }) => {
+  const { user, isAdmin, loading } = useAuth();
+  
+  // Mostrar estado de carga durante la verificación
+  if (loading) {
+    return <div className="page">Cargando...</div>;
+  }
+  
+  // Redirigir a home si no es administrador
+  if (!user || !isAdmin()) {
+    return <Navigate to="/" />;
+  }
+  
+  return children;
+};
+
+/**
+ * Componente principal de contenido de la aplicación con configuración de rutas
+ * Define la estructura de rutas de la aplicación y envuelve el contenido con contexto de autenticación
+ * Implementa rutas protegidas para secciones que requieren autenticación
+ * 
+ * @returns {JSX.Element} Contenido de la aplicación con estructura de rutas y layout
  */
 function AppContent() {
-  const { loading } = useAuth(); // ✅ CORREGIDO: Solo se usa 'loading'
+  const { loading } = useAuth();
 
+  // Estado de carga global de la aplicación
   if (loading) {
     return <div className="page">Cargando...</div>;
   }
@@ -55,12 +88,12 @@ function AppContent() {
       <Header />
       <main className="main-content">
         <Routes>
-          {/* Public routes accessible to all users */}
+          {/* Rutas públicas accesibles para todos los usuarios */}
           <Route path="/" element={<SearchPage />} />
           <Route path="/buscar" element={<SearchPage />} />
           <Route path="/resultados" element={<ResultsPage />} />
           
-          {/* Protected routes requiring authentication */}
+          {/* Rutas protegidas que requieren autenticación */}
           <Route 
             path="/confirmar-reserva" 
             element={
@@ -86,9 +119,54 @@ function AppContent() {
             } 
           />
           
-          {/* Authentication routes */}
+          {/* Rutas de administrador - protegidas solo para admins */}
+          <Route 
+            path="/admin" 
+            element={
+              <AdminRoute>
+                <AdminDashboard />
+              </AdminRoute>
+            } 
+          />
+          <Route 
+            path="/admin/vuelos" 
+            element={
+              <AdminRoute>
+                <FlightsManagement />
+              </AdminRoute>
+            } 
+          />
+          <Route 
+            path="/admin/vuelos-editar" 
+            element={
+              <AdminRoute>
+                <FlightEdit />
+              </AdminRoute>
+            } 
+          />
+          <Route 
+            path="/admin/vuelos-crear" 
+            element={
+              <AdminRoute>
+                <FlightEdit />
+              </AdminRoute>
+            } 
+          />
+          <Route 
+            path="/admin/pasajeros" 
+            element={
+              <AdminRoute>
+                <PassengersList />
+              </AdminRoute>
+            } 
+          />
+          
+          {/* Rutas de autenticación */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/registro" element={<RegisterPage />} />
+
+          {/* Ruta de fallback para páginas no encontradas */}
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </main>
     </div>
@@ -96,12 +174,12 @@ function AppContent() {
 }
 
 /**
- * Root application component
- * Provides the main application structure with authentication context
- * and routing capabilities. This component serves as the entry point
- * for the React application and establishes the foundational providers.
+ * Componente raíz de la aplicación
+ * Proporciona la estructura principal de la aplicación con contexto de autenticación
+ * y capacidades de enrutamiento. Este componente sirve como punto de entrada
+ * para la aplicación React y establece los proveedores fundamentales.
  * 
- * @returns {JSX.Element} Root application component with providers
+ * @returns {JSX.Element} Componente raíz de la aplicación con proveedores
  */
 function App() {
   return (

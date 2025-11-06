@@ -1,14 +1,18 @@
-// src/components/Header.jsx - ACTUALIZADO
+// src/components/Header.jsx
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import logo from "../assets/logo_header_white.png";
 
+/**
+ * Componente de cabecera principal que maneja navegación,
+ * estado de usuario y menú responsive
+ */
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user, logout, isAdmin } = useAuth();
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
@@ -28,7 +32,6 @@ export default function Header() {
 
   return (
     <header className="app-header" role="banner">
-      {/* logo */}
       <div className="app-header__logo" onClick={closeMenu}>
         <Link
           to="/"
@@ -42,7 +45,6 @@ export default function Header() {
         </Link>
       </div>
 
-      {/* botón menú móvil */}
       <button
         className={`app-menu-toggle ${menuOpen ? "open" : ""}`}
         onClick={toggleMenu}
@@ -56,39 +58,47 @@ export default function Header() {
         <span></span>
       </button>
 
-      {/* navegación */}
       <nav 
         id="main-navigation"
         className={`app-header__nav ${menuOpen ? "active" : ""}`}
         aria-label="Navegación principal"
       >
-        <Link
-          to="/buscar"
-          className={isActive("/buscar") ? "active" : ""}
-          onClick={closeMenu}
-          aria-current={isActive("/buscar") ? "page" : undefined}
-        >
-          Buscar Vuelos
-        </Link>
+        {!isAdmin() && (
+          <Link
+            to="/buscar"
+            className={isActive("/buscar") ? "active" : ""}
+            onClick={closeMenu}
+            aria-current={isActive("/buscar") ? "page" : undefined}
+          >
+            Buscar Vuelos
+          </Link>
+        )}
 
         {user ? (
           <>
-            <Link
-              to="/editar-perfil"
-              className={isActive("/editar-perfil") ? "active" : ""}
-              onClick={closeMenu}
-              aria-current={isActive("/editar-perfil") ? "page" : undefined}
-            >
-              Mi Perfil
-            </Link>
-            
-            <div className="user-info" style={{ color: 'white', margin: '0 1rem' }}>
-              Hola, {user.nombre.split(' ')[0]}
-            </div>
+            {isAdmin() ? (
+              <Link
+                to="/admin"
+                className={isActive("/admin") ? "active" : ""}
+                onClick={closeMenu}
+                aria-current={isActive("/admin") ? "page" : undefined}
+              >
+                Administración
+              </Link>
+            ) : (
+              <Link
+                to="/editar-perfil"
+                className={isActive("/editar-perfil") ? "active" : ""}
+                onClick={closeMenu}
+                aria-current={isActive("/editar-perfil") ? "page" : undefined}
+              >
+                Mi Perfil
+              </Link>
+            )}
             
             <button
               onClick={handleLogout}
-              className="form-btn form-btn--secondary"
+              className="btn btn--secondary"
               style={{ background: 'transparent', border: '1px solid white' }}
             >
               Cerrar Sesión

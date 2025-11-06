@@ -132,3 +132,20 @@ export const filterInput = (value, fieldType) => {
       return value;
   }
 };
+
+export const hasCompleteProfile = (user) => {
+  if (!user) return false;
+  
+  return (
+    user.documento &&
+    user.nombre &&
+    user.correo &&
+    user.celular &&
+    user.nacimiento &&
+    isValidDocumentNumber(user.documento, "CC") && // Uses existing validator
+    isValidName(user.nombre) && // Uses existing validator  
+    isValidEmail(user.correo) && // Uses existing validator
+    isValidPhone(user.celular) && // Uses existing validator
+    isValidBirthDate(user.nacimiento) // Uses existing validator
+  );
+};

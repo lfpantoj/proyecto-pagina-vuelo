@@ -5,29 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { flights } from "../data/flights";
 import Button from "../components/Button";
 import { formatCurrency } from "../utils/format";
-
-/**
- * Validates if a user has a complete profile with all required information
- * Checks for presence and format of essential user data fields required for reservations
- * 
- * @param {Object} user - User object from authentication context
- * @returns {boolean} True if user has complete profile data, false otherwise
- */
-const hasCompleteProfile = (user) => {
-  if (!user) return false;
-  
-  return (
-    user.documento &&
-    user.nombre &&
-    user.correo &&
-    user.celular &&
-    user.nacimiento &&
-    user.documento.length >= 6 &&
-    user.nombre.split(' ').length >= 2 && // At least first name and last name
-    user.celular.length >= 10 &&
-    user.nacimiento.length === 10 // YYYY-MM-DD format
-  );
-};
+import { hasCompleteProfile } from "../utils/validators";
 
 /**
  * Flight search results page component that displays filtered flight options
@@ -79,7 +57,7 @@ export default function ResultsPage() {
         } 
       });
     } 
-    // Step 2: Verify user profile completeness
+    // Step 2: Verify user profile completeness using centralized validator
     else if (!hasCompleteProfile(user)) {
       navigate("/editar-perfil", { 
         state: { 

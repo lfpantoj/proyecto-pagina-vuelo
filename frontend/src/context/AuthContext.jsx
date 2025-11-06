@@ -1,19 +1,9 @@
 // src/context/AuthContext.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { defaultUser, mockPassenger } from '../data/passenger';
+import { defaultUser, adminUser } from '../data/passenger';
 
-/**
- * Authentication context for managing user authentication state across the application.
- * Provides user login, registration, logout, and profile management functionality.
- * Uses localStorage for persistent authentication state management.
- */
 const AuthContext = createContext();
 
-/**
- * Custom hook to access authentication context
- * @returns {Object} Authentication context value
- * @throws {Error} If used outside of AuthProvider
- */
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -22,31 +12,45 @@ export const useAuth = () => {
   return context;
 };
 
-/**
- * Authentication provider component that manages user state and authentication operations.
- * This provider initializes user data from localStorage, handles user authentication flows,
- * and persists user state across browser sessions.
- * 
- * @param {Object} props - Component properties
- * @param {ReactNode} props.children - Child components to be wrapped with auth context
- * @returns {JSX.Element} AuthProvider component
- */
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  /**
-   * Initializes application with default user data and restores session from localStorage
-   */
   useEffect(() => {
-    const savedUsers = JSON.parse(localStorage.getItem('users') || '[]');
-    
-    // Initialize with default user if no users exist
-    if (savedUsers.length === 0) {
-      const users = [defaultUser];
-      localStorage.setItem('users', JSON.stringify(users));
-      console.log("Usuario por defecto creado desde passenger.js");
-    }
+    const initializeUsers = () => {
+      const savedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+      
+      // Verificar si ya existen los usuarios
+      const hasDefaultUser = savedUsers.find(u => u.correo === defaultUser.correo);
+      const hasAdminUser = savedUsers.find(u => u.correo === adminUser.correo);
+      
+      // Si no existen los usuarios, crearlos
+      if (!hasDefaultUser || !hasAdminUser) {
+        const users = [];
+        
+        if (!hasDefaultUser) {
+          users.push(defaultUser);
+          console.log("Usuario por defecto creado:", defaultUser.correo);
+        }
+        
+        if (!hasAdminUser) {
+          users.push(adminUser);
+          console.log("Usuario administrador creado:", adminUser.correo);
+        }
+        
+        // Agregar los usuarios existentes que no vamos a reemplazar
+        savedUsers.forEach(existingUser => {
+          if (!users.find(u => u.correo === existingUser.correo)) {
+            users.push(existingUser);
+          }
+        });
+        
+        localStorage.setItem('users', JSON.stringify(users));
+        console.log("Base de usuarios inicializada");
+      }
+    };
+
+    initializeUsers();
 
     // Restore user session from localStorage
     const savedUser = localStorage.getItem('currentUser');
@@ -57,12 +61,6 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  /**
-   * Authenticates user with email and password credentials
-   * @param {string} email - User email address
-   * @param {string} password - User password
-   * @returns {Promise<Object>} Authentication result with success status and error message
-   */
   const login = async (email, password) => {
     await new Promise(resolve => setTimeout(resolve, 1000));
     
@@ -75,7 +73,8 @@ export const AuthProvider = ({ children }) => {
         nombre: `${user.primerNombre} ${user.segundoNombre || ''} ${user.primerApellido} ${user.segundoApellido || ''}`.trim().replace(/\s+/g, ' '),
         correo: user.correo,
         celular: user.numeroCelular,
-        nacimiento: user.fechaNacimiento
+        nacimiento: user.fechaNacimiento,
+        rol: user.rol || 'usuario'
       };
       
       setUser(userData);
@@ -86,11 +85,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  /**
-   * Registers a new user account
-   * @param {Object} userData - Complete user registration data
-   * @returns {Promise<Object>} Registration result with success status and error message
-   */
   const register = async (userData) => {
     await new Promise(resolve => setTimeout(resolve, 1000));
     
@@ -100,24 +94,18 @@ export const AuthProvider = ({ children }) => {
       return { success: false, error: "El usuario ya existe" };
     }
     
-    savedUsers.push(userData);
+    const newUser = { ...userData, rol: 'usuario' };
+    savedUsers.push(newUser);
     localStorage.setItem('users', JSON.stringify(savedUsers));
     
     return { success: true };
   };
 
-  /**
-   * Logs out current user and clears session data
-   */
   const logout = () => {
     setUser(null);
     localStorage.removeItem('currentUser');
   };
 
-  /**
-   * Updates user profile information
-   * @param {Object} updatedData - Updated user profile data
-   */
   const updateProfile = (updatedData) => {
     if (!user) return;
     
@@ -125,12 +113,10 @@ export const AuthProvider = ({ children }) => {
     setUser(updatedUser);
     localStorage.setItem('currentUser', JSON.stringify(updatedUser));
     
-    // Also update user in the users list
     const savedUsers = JSON.parse(localStorage.getItem('users') || '[]');
     const userIndex = savedUsers.findIndex(u => u.correo === user.correo);
     
     if (userIndex !== -1) {
-      // Parse full name into parts for correct storage format
       const nombrePartes = updatedData.nombre.split(' ');
       
       savedUsers[userIndex] = { 
@@ -142,21 +128,24 @@ export const AuthProvider = ({ children }) => {
         segundoApellido: nombrePartes[3] || '',
         numeroCelular: updatedData.celular,
         fechaNacimiento: updatedData.nacimiento,
-        correo: updatedData.correo
+        correo: updatedData.correo,
+        rol: savedUsers[userIndex].rol
       };
       localStorage.setItem('users', JSON.stringify(savedUsers));
     }
   };
 
-  /**
-   * Authentication context value containing user state and authentication methods
-   */
+  const isAdmin = () => {
+    return user && user.rol === 'admin';
+  };
+
   const value = {
     user,
     login,
     register,
     logout,
     updateProfile,
+    isAdmin,
     loading
   };
 
