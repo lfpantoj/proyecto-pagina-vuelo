@@ -9,7 +9,7 @@ import {
   filterInput 
 } from './validators';
 
-// Validation schemas
+// Esquemas de validación para formularios de login
 export const loginSchema = {
   correo: (value) => {
     if (!value) return "El correo electrónico es requerido";
@@ -23,6 +23,7 @@ export const loginSchema = {
   }
 };
 
+// Esquema de validación para registro de usuarios
 export const registerSchema = {
   correo: (value, form) => {
     if (!value) return "El correo electrónico es requerido";
@@ -31,6 +32,7 @@ export const registerSchema = {
   },
   confirmarCorreo: (value, form) => {
     if (!value) return "Confirma tu correo electrónico";
+    // Valida que los correos coincidan
     if (value !== form.correo) return "Los correos electrónicos no coinciden";
     return null;
   },
@@ -41,12 +43,13 @@ export const registerSchema = {
   },
   confirmarContrasena: (value, form) => {
     if (!value) return "Confirma tu contraseña";
+    // Valida que las contraseñas coincidan
     if (value !== form.contrasena) return "Las contraseñas no coinciden";
     return null;
   }
 };
 
-// Profile schema with ALL fields including optional ones
+// Esquema de validación completo para perfil de usuario
 export const profileSchema = {
   tipoDocumento: (value) => {
     if (!value) return "Selecciona un tipo de documento";
@@ -54,6 +57,7 @@ export const profileSchema = {
   },
   numeroDocumento: (value, form) => {
     if (!value) return "El número de documento es requerido";
+    // Valida según el tipo de documento seleccionado
     if (!isValidDocumentNumber(value, form.tipoDocumento)) {
       return "Número de documento inválido";
     }
@@ -65,7 +69,7 @@ export const profileSchema = {
     return null;
   },
   segundoNombre: (value) => {
-    // Optional field - only validate if has value
+    // Campo opcional - solo valida si tiene valor
     if (value && !isValidName(value)) return "Solo letras";
     return null;
   },
@@ -75,7 +79,7 @@ export const profileSchema = {
     return null;
   },
   segundoApellido: (value) => {
-    // Optional field - only validate if has value
+    // Campo opcional - solo valida si tiene valor
     if (value && !isValidName(value)) return "Solo letras";
     return null;
   },
@@ -111,7 +115,7 @@ export const profileSchema = {
   }
 };
 
-// Field configuration for ProfileEdit - MOVED FROM ProfileEdit.jsx
+// Configuración de campos para el formulario de perfil
 export const PROFILE_FIELD_GROUPS = [
   {
     title: "Información Personal",
@@ -225,7 +229,7 @@ export const PROFILE_FIELD_GROUPS = [
   }
 ];
 
-// Helper functions for ProfileEdit
+// Función auxiliar para parsear nombre completo en partes
 export const parseNombreCompleto = (nombreCompleto) => {
   if (!nombreCompleto) return { primerNombre: "", segundoNombre: "", primerApellido: "", segundoApellido: "" };
   
@@ -238,11 +242,13 @@ export const parseNombreCompleto = (nombreCompleto) => {
   };
 };
 
+// Función para obtener valor filtrado según tipo de campo
 export const getFilteredValue = (value, fieldType) => {
   if (!fieldType) return value;
   return filterInput(value, fieldType);
 };
 
+// Función para obtener estado inicial del formulario de perfil
 export const getProfileInitialState = (pasajeroInicial, user) => {
   if (pasajeroInicial) {
     return {
@@ -286,7 +292,7 @@ export const getProfileInitialState = (pasajeroInicial, user) => {
   }
 };
 
-// Validation utilities
+// Utilidad para validar formulario completo
 export const validateForm = (form, schema) => {
   const errors = {};
   let hasErrors = false;
@@ -302,6 +308,7 @@ export const validateForm = (form, schema) => {
   return { errors, isValid: !hasErrors };
 };
 
+// Utilidad para validar campo individual
 export const validateField = (field, value, form, schema) => {
   if (schema[field]) {
     return schema[field](value, form);
@@ -309,7 +316,7 @@ export const validateField = (field, value, form, schema) => {
   return null;
 };
 
-// En validationSchemas.js
+// Esquema de validación para formulario de vuelos
 export const flightSchema = {
   id: (value) => !value ? "El ID del vuelo es requerido" : null,
   aerolinea: (value) => !value ? "La aerolínea es requerida" : null,
@@ -322,6 +329,7 @@ export const flightSchema = {
   asientos: (value) => !value || value < 0 ? "Los asientos no pueden ser negativos" : null
 };
 
+// Configuración de campos para formulario de login
 export const LOGIN_FIELDS = [
   {
     name: "correo",
@@ -341,6 +349,7 @@ export const LOGIN_FIELDS = [
   }
 ];
 
+// Configuración de campos para formulario de registro
 export const REGISTER_FIELDS = [
   {
     name: "correo",
@@ -376,10 +385,12 @@ export const REGISTER_FIELDS = [
   }
 ];
 
+// Esquema de validación para búsqueda de vuelos
 export const searchSchema = {
   origen: (value) => !value ? "Selecciona una ciudad de origen" : null,
   destino: (value, form) => {
     if (!value) return "Selecciona una ciudad de destino";
+    // Valida que origen y destino sean diferentes
     if (value === form.origen) return "El destino no puede ser igual al origen";
     return null;
   },
