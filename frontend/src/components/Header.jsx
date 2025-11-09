@@ -9,21 +9,25 @@ import logo from "../assets/logo_header_white.png";
  * estado de usuario y menú responsive
  */
 export default function Header() {
+  // Estado para controlar la visibilidad del menú móvil
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout, isAdmin } = useAuth();
 
+  // Funciones para manejar el estado del menú
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
   const isActive = (path) => location.pathname === path;
 
+  // Maneja el cierre del menú con tecla Escape
   const handleKeyDown = (e) => {
     if (e.key === 'Escape') {
       setMenuOpen(false);
     }
   };
 
+  // Maneja el cierre de sesión del usuario
   const handleLogout = () => {
     logout();
     navigate("/");
@@ -32,6 +36,7 @@ export default function Header() {
 
   return (
     <header className="app-header" role="banner">
+      {/* Logo de la aplicación con enlace al inicio */}
       <div className="app-header__logo" onClick={closeMenu}>
         <Link
           to="/"
@@ -45,6 +50,7 @@ export default function Header() {
         </Link>
       </div>
 
+      {/* Botón de menú hamburguesa para dispositivos móviles */}
       <button
         className={`app-menu-toggle ${menuOpen ? "open" : ""}`}
         onClick={toggleMenu}
@@ -58,11 +64,13 @@ export default function Header() {
         <span></span>
       </button>
 
+      {/* Navegación principal con enlaces dinámicos según el usuario */}
       <nav 
         id="main-navigation"
         className={`app-header__nav ${menuOpen ? "active" : ""}`}
         aria-label="Navegación principal"
       >
+        {/* Muestra enlace de búsqueda solo para usuarios no administradores */}
         {!isAdmin() && (
           <Link
             to="/buscar"
@@ -74,8 +82,10 @@ export default function Header() {
           </Link>
         )}
 
+        {/* Renderizado condicional según el estado de autenticación */}
         {user ? (
           <>
+            {/* Enlaces diferentes para administradores y usuarios regulares */}
             {isAdmin() ? (
               <Link
                 to="/admin"
@@ -96,6 +106,7 @@ export default function Header() {
               </Link>
             )}
             
+            {/* Botón para cerrar sesión */}
             <button
               onClick={handleLogout}
               className="btn btn--secondary"
@@ -105,6 +116,7 @@ export default function Header() {
             </button>
           </>
         ) : (
+          {/* Enlaces para usuarios no autenticados */}
           <>
             <Link
               to="/registro"
