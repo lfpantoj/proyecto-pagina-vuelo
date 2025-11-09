@@ -10,8 +10,10 @@ import Button from "../../components/Button";
  * @returns {JSX.Element} Panel de control de administrador
  */
 export default function AdminDashboard() {
+  // Hook para la navegación entre rutas
   const navigate = useNavigate();
 
+  // Configuración de las opciones del panel administrativo
   const adminOptions = [
     {
       title: "Gestionar Vuelos",
@@ -29,14 +31,21 @@ export default function AdminDashboard() {
 
   return (
     <main className="page">
+      {/* Título principal del panel de administración */}
       <h1>Panel de Administración</h1>
+      {/* Descripción secundaria del panel */}
       <p className="muted">Gestiona vuelos y pasajeros del sistema</p>
 
+      {/* Contenedor principal de las opciones administrativas */}
       <div className="admin-dashboard">
+        {/* Mapea cada opción administrativa a un componente de tarjeta */}
         {adminOptions.map((option, index) => (
           <div key={index} className="admin-card">
+            {/* Título de la opción administrativa */}
             <h3>{option.title}</h3>
+            {/* Descripción detallada de la funcionalidad */}
             <p>{option.description}</p>
+            {/* Botón para acceder a la funcionalidad específica */}
             <Button 
               variant={option.variant} 
               onClick={option.action}
