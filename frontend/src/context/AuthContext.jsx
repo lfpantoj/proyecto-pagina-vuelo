@@ -2,8 +2,10 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { defaultUser, adminUser } from '../data/passenger';
 
+// Crea el contexto de autenticación
 const AuthContext = createContext();
 
+// Hook personalizado para usar el contexto de autenticación
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -12,6 +14,7 @@ export const useAuth = () => {
   return context;
 };
 
+// Proveedor del contexto de autenticación
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,11 +23,11 @@ export const AuthProvider = ({ children }) => {
     const initializeUsers = () => {
       const savedUsers = JSON.parse(localStorage.getItem('users') || '[]');
       
-      // Verificar si ya existen los usuarios
+      // Verifica si los usuarios por defecto ya existen
       const hasDefaultUser = savedUsers.find(u => u.correo === defaultUser.correo);
       const hasAdminUser = savedUsers.find(u => u.correo === adminUser.correo);
       
-      // Si no existen los usuarios, crearlos
+      // Crea los usuarios por defecto si no existen
       if (!hasDefaultUser || !hasAdminUser) {
         const users = [];
         
@@ -38,7 +41,7 @@ export const AuthProvider = ({ children }) => {
           console.log("Usuario administrador creado:", adminUser.correo);
         }
         
-        // Agregar los usuarios existentes que no vamos a reemplazar
+        // Mantiene los usuarios existentes
         savedUsers.forEach(existingUser => {
           if (!users.find(u => u.correo === existingUser.correo)) {
             users.push(existingUser);
@@ -52,7 +55,7 @@ export const AuthProvider = ({ children }) => {
 
     initializeUsers();
 
-    // Restore user session from localStorage
+    // Restaura la sesión del usuario desde localStorage
     const savedUser = localStorage.getItem('currentUser');
     if (savedUser) {
       setUser(JSON.parse(savedUser));
@@ -61,6 +64,7 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
+  // Función para iniciar sesión
   const login = async (email, password) => {
     await new Promise(resolve => setTimeout(resolve, 1000));
     
@@ -85,6 +89,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Función para registrar nuevo usuario
   const register = async (userData) => {
     await new Promise(resolve => setTimeout(resolve, 1000));
     
@@ -101,11 +106,13 @@ export const AuthProvider = ({ children }) => {
     return { success: true };
   };
 
+  // Función para cerrar sesión
   const logout = () => {
     setUser(null);
     localStorage.removeItem('currentUser');
   };
 
+  // Función para actualizar perfil de usuario
   const updateProfile = (updatedData) => {
     if (!user) return;
     
@@ -135,10 +142,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Función para verificar si el usuario es administrador
   const isAdmin = () => {
     return user && user.rol === 'admin';
   };
 
+  // Valor del contexto que se provee a los componentes
   const value = {
     user,
     login,
