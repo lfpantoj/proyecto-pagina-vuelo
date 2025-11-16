@@ -1,16 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\frontend",
-    "\\frontend\\public",
-    "\\frontend\\src",
-    "\\frontend\\src\\components",
-    "\\frontend\\src\\context",
-    "\\frontend\\src\\data",
-    "\\frontend\\src\\pages",
-    "\\frontend\\src\\pages\\Admin",
-    "\\frontend\\src\\pages\\Auth"
+    "\\backend",
+    "\\backend\\backend",
+    "\\backend\\backend\\src",
+    "\\backend\\backend\\src\\main",
+    "\\backend\\backend\\src\\main\\java",
+    "\\backend\\backend\\src\\main\\java\\com",
+    "\\backend\\backend\\src\\main\\java\\com\\vueloscolombia",
+    "\\backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend",
+    "\\backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\dto"
   ],
-  "SelectedNode": "\\frontend\\package.json",
+  "SelectedNode": "\\backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\config\\DataLoader.java",
   "PreviewInSolutionExplorer": false
 }

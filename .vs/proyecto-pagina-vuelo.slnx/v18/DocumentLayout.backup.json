@@ -3,16 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\synus\\source\\repos\\lfpantoj\\proyecto-pagina-vuelo\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\synus\\source\\repos\\lfpantoj\\proyecto-pagina-vuelo\\frontend\\package.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:frontend\\package.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\synus\\source\\repos\\lfpantoj\\proyecto-pagina-vuelo\\backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\model\\Reserva.java||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\model\\Reserva.java||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\synus\\source\\repos\\lfpantoj\\proyecto-pagina-vuelo\\frontend\\public\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:frontend\\public\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\synus\\source\\repos\\lfpantoj\\proyecto-pagina-vuelo\\backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\model\\Vuelo.java||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\model\\Vuelo.java||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\synus\\source\\repos\\lfpantoj\\proyecto-pagina-vuelo\\frontend\\src\\App.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:frontend\\src\\App.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\synus\\source\\repos\\lfpantoj\\proyecto-pagina-vuelo\\backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\model\\Rol.java||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\model\\Rol.java||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\synus\\source\\repos\\lfpantoj\\proyecto-pagina-vuelo\\backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\model\\Usuario.java||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\model\\Usuario.java||{3B902123-F8A7-4915-9F01-361F908088D0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,45 +26,58 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Reserva.java",
+              "DocumentMoniker": "C:\\Users\\synus\\source\\repos\\lfpantoj\\proyecto-pagina-vuelo\\backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\model\\Reserva.java",
+              "RelativeDocumentMoniker": "backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\model\\Reserva.java",
+              "ToolTip": "C:\\Users\\synus\\source\\repos\\lfpantoj\\proyecto-pagina-vuelo\\backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\model\\Reserva.java",
+              "RelativeToolTip": "backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\model\\Reserva.java",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-11-15T03:18:15.401Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "index.html",
-              "DocumentMoniker": "C:\\Users\\synus\\source\\repos\\lfpantoj\\proyecto-pagina-vuelo\\frontend\\public\\index.html",
-              "RelativeDocumentMoniker": "frontend\\public\\index.html",
-              "ToolTip": "C:\\Users\\synus\\source\\repos\\lfpantoj\\proyecto-pagina-vuelo\\frontend\\public\\index.html",
-              "RelativeToolTip": "frontend\\public\\index.html",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
-              "WhenOpened": "2025-11-06T23:38:17.799Z",
+              "Title": "Vuelo.java",
+              "DocumentMoniker": "C:\\Users\\synus\\source\\repos\\lfpantoj\\proyecto-pagina-vuelo\\backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\model\\Vuelo.java",
+              "RelativeDocumentMoniker": "backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\model\\Vuelo.java",
+              "ToolTip": "C:\\Users\\synus\\source\\repos\\lfpantoj\\proyecto-pagina-vuelo\\backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\model\\Vuelo.java",
+              "RelativeToolTip": "backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\model\\Vuelo.java",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-11-15T03:18:02.144Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "App.js",
-              "DocumentMoniker": "C:\\Users\\synus\\source\\repos\\lfpantoj\\proyecto-pagina-vuelo\\frontend\\src\\App.js",
-              "RelativeDocumentMoniker": "frontend\\src\\App.js",
-              "ToolTip": "C:\\Users\\synus\\source\\repos\\lfpantoj\\proyecto-pagina-vuelo\\frontend\\src\\App.js",
-              "RelativeToolTip": "frontend\\src\\App.js",
-              "ViewState": "AgIAAJUAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-11-06T23:36:49.118Z",
+              "Title": "Rol.java",
+              "DocumentMoniker": "C:\\Users\\synus\\source\\repos\\lfpantoj\\proyecto-pagina-vuelo\\backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\model\\Rol.java",
+              "RelativeDocumentMoniker": "backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\model\\Rol.java",
+              "ToolTip": "C:\\Users\\synus\\source\\repos\\lfpantoj\\proyecto-pagina-vuelo\\backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\model\\Rol.java",
+              "RelativeToolTip": "backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\model\\Rol.java",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-11-15T03:17:48.768Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "package.json",
-              "DocumentMoniker": "C:\\Users\\synus\\source\\repos\\lfpantoj\\proyecto-pagina-vuelo\\frontend\\package.json",
-              "RelativeDocumentMoniker": "frontend\\package.json",
-              "ToolTip": "C:\\Users\\synus\\source\\repos\\lfpantoj\\proyecto-pagina-vuelo\\frontend\\package.json",
-              "RelativeToolTip": "frontend\\package.json",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABcAAAAhAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-11-06T23:35:32.702Z",
+              "DocumentIndex": 3,
+              "Title": "Usuario.java",
+              "DocumentMoniker": "C:\\Users\\synus\\source\\repos\\lfpantoj\\proyecto-pagina-vuelo\\backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\model\\Usuario.java",
+              "RelativeDocumentMoniker": "backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\model\\Usuario.java",
+              "ToolTip": "C:\\Users\\synus\\source\\repos\\lfpantoj\\proyecto-pagina-vuelo\\backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\model\\Usuario.java",
+              "RelativeToolTip": "backend\\backend\\src\\main\\java\\com\\vueloscolombia\\backend\\model\\Usuario.java",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-11-15T03:16:23.243Z",
               "EditorCaption": ""
             }
           ]
