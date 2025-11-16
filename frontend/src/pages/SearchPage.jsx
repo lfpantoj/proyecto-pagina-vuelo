@@ -7,6 +7,7 @@ import FormInput from "../components/FormInput";
 import { useForm } from "../hooks/useForm";
 import { searchSchema } from "../utils/validationSchemas";
 
+// Lista de ciudades disponibles para selección
 const CITIES = [
   { value: "Bogotá", label: "Bogotá" },
   { value: "Medellín", label: "Medellín" },
@@ -14,6 +15,7 @@ const CITIES = [
   { value: "Cartagena", label: "Cartagena" }
 ];
 
+// Opciones de configuración de pasajeros
 const PASSENGER_OPTIONS = [
   { value: "1 adulto", label: "1 adulto" },
   { value: "2 adultos", label: "2 adultos" },
@@ -21,14 +23,20 @@ const PASSENGER_OPTIONS = [
   { value: "1 adulto, 1 niño", label: "1 adulto, 1 niño" }
 ];
 
+/**
+ * Página de búsqueda de vuelos con formulario de criterios de búsqueda
+ * Permite al usuario especificar origen, destino, fecha y número de pasajeros
+ */
 export default function SearchPage() {
   const navigate = useNavigate();
 
+  // Maneja el envío del formulario y navegación a resultados
   const onSubmit = async (formData) => {
     await new Promise(resolve => setTimeout(resolve, 800));
     navigate("/resultados", { state: formData });
   };
 
+  // Hook personalizado para gestión del formulario con validación
   const {
     form,
     error,
@@ -48,6 +56,7 @@ export default function SearchPage() {
     onSubmit
   );
 
+  // Fecha mínima permitida (hoy) para evitar selección de fechas pasadas
   const minDate = new Date().toISOString().slice(0, 10);
 
   return (
@@ -57,6 +66,7 @@ export default function SearchPage() {
       <form 
         onSubmit={handleSubmit} 
         noValidate 
+        // Aplica clase de loading durante la búsqueda
         className={loading ? 'form-loading' : ''}
       >
         <div className="form-row">
@@ -67,6 +77,7 @@ export default function SearchPage() {
             value={form.origen}
             onChange={handleChange}
             required
+            // Incluye opción vacía para selección inicial
             options={[{ value: "", label: "Seleccione origen" }, ...CITIES]}
             error={submitted ? fieldErrors.origen : undefined}
             submitted={submitted}
@@ -99,6 +110,7 @@ export default function SearchPage() {
             error={submitted ? fieldErrors.fechaIda : undefined}
             submitted={submitted}
             hint="Fecha del vuelo"
+            // Restringe selección a fechas futuras
             min={minDate}
           />
 
@@ -113,6 +125,7 @@ export default function SearchPage() {
           />
         </div>
 
+        {/* Muestra error general del formulario si existe */}
         {error && (
           <div className="form-error" role="alert">
             {error}
@@ -139,4 +152,4 @@ export default function SearchPage() {
       </form>
     </main>
   );
-} 
+}

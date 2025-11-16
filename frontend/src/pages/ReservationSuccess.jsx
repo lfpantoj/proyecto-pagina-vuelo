@@ -5,13 +5,8 @@ import Button from "../components/Button";
 import { formatCurrency } from "../utils/format";
 
 /**
- * SVG icon component for success confirmation visual indicator
- * Provides a scalable checkmark icon with configurable size and styling
- * 
- * @param {Object} props - Icon properties
- * @param {number} props.size - Icon dimensions in pixels
- * @param {string} props.className - Additional CSS classes for styling
- * @returns {JSX.Element} Check circle SVG icon
+ * Componente de icono SVG para indicador visual de confirmación exitosa
+ * Proporciona un icono de verificación escalable con tamaño y estilo configurable
  */
 const CheckCircle = ({ size = 48, className = "" }) => (
   <svg 
@@ -21,6 +16,7 @@ const CheckCircle = ({ size = 48, className = "" }) => (
     fill="none" 
     stroke="currentColor" 
     className={className}
+    // Oculta el icono de los lectores de pantalla
     aria-hidden="true"
   >
     <path 
@@ -33,25 +29,15 @@ const CheckCircle = ({ size = 48, className = "" }) => (
 );
 
 /**
- * Reservation success page component that displays confirmation details
- * after a successful flight reservation. This page provides users with
- * a comprehensive summary of their booking including reservation number,
- * flight details, passenger information, and post-booking actions.
- * 
- * The component generates a unique reservation number and provides
- * functionality for printing reservation details and starting new bookings.
- * 
- * @returns {JSX.Element} Rendered reservation success page with booking confirmation
+ * Componente de página de confirmación exitosa de reserva
+ * Muestra los detalles de confirmación después de una reserva de vuelo exitosa
  */
 export default function ReservationSuccess() {
   const navigate = useNavigate();
   const { state } = useLocation();
   const { vuelo, pasajero } = state || {};
 
-  /**
-   * Error state handling for missing reservation data
-   * Renders error message and navigation when essential reservation data is unavailable
-   */
+  // Maneja el estado de error cuando faltan datos de reserva
   if (!vuelo || !pasajero) {
     return (
       <main className="page">
@@ -65,17 +51,11 @@ export default function ReservationSuccess() {
     );
   }
 
-  /**
-   * Reservation confirmation data object
-   * Generates unique reservation number and captures booking metadata
-   * 
-   * @type {Object}
-   * @property {string} numero - Unique reservation identifier
-   * @property {string} fechaReserva - Formatted reservation date
-   * @property {string} estado - Reservation status indicator
-   */
+  // Objeto de datos de confirmación de reserva
   const reserva = {
+    // Genera un número de reserva único
     numero: Math.random().toString(36).slice(2, 9).toUpperCase(),
+    // Formatea la fecha de reserva en español colombiano
     fechaReserva: new Date().toLocaleDateString("es-CO", { 
       year: "numeric", 
       month: "short", 
@@ -86,7 +66,7 @@ export default function ReservationSuccess() {
 
   return (
     <main className="page">
-      {/* Success confirmation header with visual indicator */}
+      {/* Encabezado de confirmación exitosa con indicador visual */}
       <header className="header header--success">
         <CheckCircle size={48} className="icon-success" />
         <div>
@@ -95,7 +75,7 @@ export default function ReservationSuccess() {
         </div>
       </header>
 
-      {/* Flight details section with accessible labeling */}
+      {/* Sección de detalles del vuelo con etiquetado accesible */}
       <section className="card" aria-labelledby="vuelo-title">
         <h3 id="vuelo-title">Vuelo</h3>
         <p>
@@ -109,7 +89,7 @@ export default function ReservationSuccess() {
         </p>
       </section>
 
-      {/* Passenger information section */}
+      {/* Sección de información del pasajero */}
       <section className="card" aria-labelledby="pasajero-title">
         <h3 id="pasajero-title">Pasajero</h3>
         <p><strong>Nombre:</strong> {pasajero.nombre}</p>
@@ -117,7 +97,7 @@ export default function ReservationSuccess() {
         <p><strong>Email:</strong> {pasajero.correo}</p>
       </section>
 
-      {/* Reservation metadata section */}
+      {/* Sección de metadatos de la reserva */}
       <section className="card" aria-labelledby="reserva-title">
         <h3 id="reserva-title">Información de la Reserva</h3>
         <p><strong>Número de reserva:</strong> {reserva.numero}</p>
@@ -125,7 +105,7 @@ export default function ReservationSuccess() {
         <p><strong>Estado:</strong> {reserva.estado}</p>
       </section>
 
-      {/* Post-reservation action buttons */}
+      {/* Botones de acción posteriores a la reserva */}
       <div className="actions">
         <Button 
           onClick={() => window.print()}

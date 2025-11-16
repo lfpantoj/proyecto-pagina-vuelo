@@ -1,9 +1,10 @@
 // src/data/passenger.js
 
 /**
- * Mock passenger data for demonstration and testing purposes.
+ * Datos simulados de pasajeros para demostración y pruebas
  */
 
+// Pasajero de ejemplo para pruebas
 export const mockPassenger = {
   documento: "84739728",
   nombre: "Pepito Gómez Alnurfio",
@@ -12,6 +13,7 @@ export const mockPassenger = {
   nacimiento: "1985-12-16"
 };
 
+// Usuario por defecto del sistema
 export const defaultUser = {
   correo: "pepito@gmail.com",
   contrasena: "123456",
@@ -23,10 +25,10 @@ export const defaultUser = {
   segundoApellido: "Alnurfio",
   numeroCelular: "300587687",
   fechaNacimiento: "1985-12-16",
-  rol: "usuario" // Agregar rol
+  rol: "usuario" // Rol de usuario normal
 };
 
-// Usuario administrador
+// Usuario administrador del sistema
 export const adminUser = {
   correo: "admin@vueloscolombia.com",
   contrasena: "admin123",
@@ -38,10 +40,10 @@ export const adminUser = {
   segundoApellido: "",
   numeroCelular: "3101234567",
   fechaNacimiento: "1980-01-01",
-  rol: "admin" // Rol de administrador
+  rol: "admin" // Rol de administrador con privilegios
 };
 
-// Datos simulados de pasajeros por vuelo
+// Datos simulados de pasajeros agrupados por vuelo
 export const passengersByFlight = {
   "AV-801": [
     mockPassenger,
@@ -65,7 +67,7 @@ export const passengersByFlight = {
   ]
 };
 
-// Opciones para formularios
+// Opciones de tipos de documento para formularios
 export const TIPOS_DOCUMENTO = [
   { value: "", label: "Seleccione tipo" },
   { value: "CC", label: "Cédula de ciudadanía" },

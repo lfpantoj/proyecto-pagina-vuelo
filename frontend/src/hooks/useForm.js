@@ -4,29 +4,12 @@ import { validateForm } from "../utils/validationSchemas";
 import { createChangeHandler } from "../utils/formHelpers";
 
 /**
- * Custom React hook for managing form state, validation, and submission.
- * This hook provides a comprehensive form management solution including
- * state handling, validation, error management, and submission lifecycle.
- * 
- * The hook integrates with validation schemas and form helpers to create
- * a consistent form handling pattern across the application.
- * 
- * @param {Object} initialState - Initial form state values
- * @param {Object} schema - Validation schema object for form validation
- * @param {Function} onSubmitCallback - Async callback function to execute on form submission
- * @returns {Object} Form management utilities and state
- * @returns {Object} return.form - Current form state values
- * @returns {string} return.error - Global form error message
- * @returns {boolean} return.loading - Form submission loading state
- * @returns {boolean} return.submitted - Whether form has been submitted
- * @returns {Object} return.fieldErrors - Validation errors per field
- * @returns {Function} return.handleChange - Change handler for form inputs
- * @returns {Function} return.handleSubmit - Submission handler for forms
- * @returns {Function} return.resetForm - Function to reset form to initial state
- * @returns {Function} return.setForm - Function to manually set form state
- * @returns {Function} return.setError - Function to manually set error state
+ * Custom hook para gestionar estado, validacion y envio de formularios
+ * Proporciona una solucion completa de manejo de formularios incluyendo
+ * estado, validacion, manejo de errores y ciclo de envio
  */
 export const useForm = (initialState, schema, onSubmitCallback) => {
+  // Estado del formulario y validacion
   const [form, setForm] = useState(initialState);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -34,45 +17,49 @@ export const useForm = (initialState, schema, onSubmitCallback) => {
   const [fieldErrors, setFieldErrors] = useState({});
 
   /**
-   * Handles form input changes with integrated error clearing
-   * Uses the createChangeHandler utility for consistent behavior
+   * Manejador de cambios en los campos del formulario
+   * Limpia errores al modificar los campos
    */
   const handleChange = createChangeHandler(setForm, setError, setFieldErrors);
 
   /**
-   * Handles form submission with validation and error management
-   * Validates form against provided schema, manages loading states,
-   * and executes the submission callback upon successful validation
-   * 
-   * @param {Event} e - Form submission event
+   * Manejador de envio del formulario con validacion
+   * Valida el formulario contra el esquema proporcionado
+   * Ejecuta el callback de envio si la validacion es exitosa
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitted(true);
     
+    // Valida el formulario completo
     const { errors, isValid } = validateForm(form, schema);
     setFieldErrors(errors);
     
+    // Detiene el envio si hay errores de validacion
     if (!isValid) {
       setError("Por favor corrige los errores en el formulario.");
       return;
     }
     
+    // Inicia estado de carga y limpia errores previos
     setLoading(true);
     setError("");
     
     try {
+      // Ejecuta la funcion de envio proporcionada
       await onSubmitCallback(form);
     } catch (err) {
+      // Maneja errores durante el envio
       setError(err.message || "Error al procesar la solicitud");
     } finally {
+      // Finaliza estado de carga
       setLoading(false);
     }
   };
 
   /**
-   * Resets the form to its initial state
-   * Clears all form values, errors, loading states, and submission flags
+   * Reinicia el formulario a su estado inicial
+   * Limpia valores, errores, estados de carga y banderas de envio
    */
   const resetForm = () => {
     setForm(initialState);
@@ -82,6 +69,7 @@ export const useForm = (initialState, schema, onSubmitCallback) => {
     setFieldErrors({});
   };
 
+  // Retorna utilidades y estado del formulario
   return {
     form,
     error,

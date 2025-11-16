@@ -34,15 +34,19 @@ export default function FormInput({
         name={name}
         value={value}
         onChange={onChange}
+        // Aplica clase condicional basada en estado de error
         className={inputClass}
         required={required}
         disabled={disabled}
         placeholder={placeholder}
+        // Define referencia para textos descriptivos de accesibilidad
         aria-describedby={
-          error ? `${id}-error` : hint ? `${id}-hint` : undefined  // Referencia a textos descriptivos
+          error ? `${id}-error` : hint ? `${id}-hint` : undefined
         }
-        aria-invalid={error ? "true" : "false"}  // Indicador de estado inválido para lectores de pantalla
+        // Indica estado inválido para lectores de pantalla
+        aria-invalid={error ? "true" : "false"}
         autoComplete={autoComplete}
+        // Propiedades adicionales pasadas al componente
         {...props}
       />
 

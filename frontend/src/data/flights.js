@@ -1,10 +1,12 @@
 // src/data/flights.js
 
 /**
- * Mock flight data for demonstration and development purposes.
- * This dataset provides sample flight information that simulates real flight data
- * for the Vuelos Colombia application.
+ * Datos de vuelos simulados para desarrollo y demostración
+ * Este conjunto de datos proporciona información de vuelos de ejemplo
+ * que simula datos reales para la aplicación Vuelos Colombia
  */
+
+// Array de vuelos simulados con información completa
 export const flights = [
   {
     id: "AV-801",
@@ -118,7 +120,7 @@ export const flights = [
   }
 ];
 
-// Constantes para formularios
+// Constantes para formularios - Opciones de aerolíneas disponibles
 export const AEROLINEAS = [
   { value: "Avianca", label: "Avianca" },
   { value: "Wingo", label: "Wingo" },
@@ -127,6 +129,7 @@ export const AEROLINEAS = [
   { value: "EasyFly", label: "EasyFly" }
 ];
 
+// Constantes para formularios - Opciones de ciudades disponibles
 export const CIUDADES = [
   { value: "Bogotá", label: "Bogotá" },
   { value: "Medellín", label: "Medellín" },

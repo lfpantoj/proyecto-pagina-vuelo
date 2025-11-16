@@ -11,16 +11,21 @@ import { flightSchema } from "../../utils/validationSchemas";
 export default function FlightEdit() {
   const navigate = useNavigate();
   const location = useLocation();
+  // Obtiene datos del vuelo desde la ubicación si está en modo edición
   const { vuelo } = location.state || {};
 
+  // Maneja el envío del formulario para crear o actualizar vuelos
   const onSubmit = async (formData) => {
+    // Simula delay de procesamiento
     await new Promise(resolve => setTimeout(resolve, 1000));
     
+    // Recupera vuelos existentes del localStorage o usa datos mock
     const savedFlights = JSON.parse(localStorage.getItem('flights') || '[]');
     const currentFlights = savedFlights.length > 0 ? savedFlights : flights;
     
     let updatedFlights;
     
+    // Actualiza vuelo existente o crea uno nuevo
     if (vuelo) {
       updatedFlights = currentFlights.map(f => 
         f.id === vuelo.id ? { ...formData, precio: Number(formData.precio), asientos: Number(formData.asientos) } : f
@@ -34,10 +39,13 @@ export default function FlightEdit() {
       updatedFlights = [...currentFlights, newFlight];
     }
     
+    // Guarda los vuelos actualizados en localStorage
     localStorage.setItem('flights', JSON.stringify(updatedFlights));
+    // Navega de vuelta a la gestión de vuelos
     navigate("/admin/vuelos");
   };
 
+  // Utiliza el hook useForm para manejar estado y validaciones del formulario
   const {
     form,
     error,
@@ -47,6 +55,7 @@ export default function FlightEdit() {
     handleChange,
     handleSubmit
   } = useForm(
+    // Estado inicial del formulario: datos del vuelo o valores vacíos
     vuelo || {
       id: "",
       aerolinea: "",
@@ -64,9 +73,11 @@ export default function FlightEdit() {
 
   return (
     <main className="page">
+      {/* Título dinámico según modo edición/creación */}
       <h1>{vuelo ? "Editar Vuelo" : "Crear Vuelo"}</h1>
 
       <form onSubmit={handleSubmit} noValidate className="form-container">
+        {/* Primera fila: ID del vuelo y aerolínea */}
         <div className="form-row">
           <FormInput
             label="ID del Vuelo"
@@ -96,6 +107,7 @@ export default function FlightEdit() {
           />
         </div>
 
+        {/* Segunda fila: Origen y destino */}
         <div className="form-row">
           <FormSelect
             label="Origen"
@@ -126,6 +138,7 @@ export default function FlightEdit() {
           />
         </div>
 
+        {/* Tercera fila: Fecha y hora de salida */}
         <div className="form-row">
           <FormInput
             label="Fecha del Vuelo"
@@ -138,6 +151,7 @@ export default function FlightEdit() {
             error={submitted ? fieldErrors.fecha : undefined}
             submitted={submitted}
             hint="Fecha de operación del vuelo"
+            // Establece fecha mínima como el día actual
             min={new Date().toISOString().split('T')[0]}
           />
 
@@ -155,6 +169,7 @@ export default function FlightEdit() {
           />
         </div>
 
+        {/* Cuarta fila: Hora de llegada y precio */}
         <div className="form-row">
           <FormInput
             label="Hora de Llegada"
@@ -186,6 +201,7 @@ export default function FlightEdit() {
           />
         </div>
 
+        {/* Quinta fila: Asientos disponibles */}
         <div className="form-row">
           <FormInput
             label="Asientos Disponibles"
@@ -204,12 +220,14 @@ export default function FlightEdit() {
           />
         </div>
 
+        {/* Muestra error general del formulario si existe */}
         {error && (
           <div className="form-error" role="alert">
             {error}
           </div>
         )}
 
+        {/* Acciones del formulario: guardar y cancelar */}
         <div className="form-actions">
           <Button type="submit" variant="primary" loading={loading}>
             {loading ? 'Guardando...' : (vuelo ? 'Actualizar Vuelo' : 'Crear Vuelo')}

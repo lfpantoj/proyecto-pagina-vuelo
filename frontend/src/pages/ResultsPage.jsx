@@ -8,46 +8,35 @@ import { formatCurrency } from "../utils/format";
 import { hasCompleteProfile } from "../utils/validators";
 
 /**
- * Flight search results page component that displays filtered flight options
- * based on user search criteria. This page shows available flights matching
- * the search parameters and handles the reservation initiation process with
- * user authentication and profile completeness validation.
- * 
- * The component implements a multi-step validation process for reservations
- * ensuring users are authenticated and have complete profiles before proceeding.
- * 
- * @returns {JSX.Element} Rendered flight results page with search outcomes and booking options
+ * Página de resultados de búsqueda de vuelos
+ * Muestra vuelos filtrados según criterios de búsqueda y maneja el proceso de reserva
+ * con validación de autenticación y perfil de usuario
  */
 export default function ResultsPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuth();
+  // Obtiene parámetros de búsqueda del estado de navegación
   const search = location.state || {};
 
-  /**
-   * Extracts search parameters from navigation state with default values
-   */
+  // Extrae parámetros de búsqueda con valores por defecto
   const { origen = "", destino = "", fechaIda = "" } = search;
 
   /**
-   * Filters available flights based on search criteria
-   * Matches flights by origin, destination, and departure date
+   * Filtra vuelos disponibles según criterios de búsqueda
+   * Coincide por origen, destino y fecha de salida
    */
   const filtered = flights.filter(
     (f) => f.origen === origen && f.destino === destino && f.fecha === fechaIda
   );
 
   /**
-   * Handles flight reservation initiation with user validation
-   * Implements a three-step validation process:
-   * 1. User authentication check
-   * 2. Profile completeness validation
-   * 3. Reservation confirmation navigation
-   * 
-   * @param {Object} vuelo - Flight object selected for reservation
+   * Maneja el inicio del proceso de reserva de vuelo
+   * Implementa validación en tres pasos: autenticación, perfil completo y confirmación
+   * @param {Object} vuelo - Objeto de vuelo seleccionado para reserva
    */
   const reservar = (vuelo) => {
-    // Step 1: Verify user authentication
+    // Paso 1: Verifica si el usuario está autenticado
     if (!user) {
       navigate("/login", { 
         state: { 
@@ -57,7 +46,7 @@ export default function ResultsPage() {
         } 
       });
     } 
-    // Step 2: Verify user profile completeness using centralized validator
+    // Paso 2: Verifica que el perfil de usuario esté completo
     else if (!hasCompleteProfile(user)) {
       navigate("/editar-perfil", { 
         state: { 
@@ -68,7 +57,7 @@ export default function ResultsPage() {
         } 
       });
     }
-    // Step 3: Proceed to reservation confirmation
+    // Paso 3: Navega a la página de confirmación de reserva
     else {
       navigate("/confirmar-reserva", { state: { vuelo } });
     }
@@ -81,7 +70,7 @@ export default function ResultsPage() {
         {origen} → {destino} • {fechaIda}
       </p>
 
-      {/* Results state handling: empty results vs. flight listing */}
+      {/* Manejo de estados: resultados vacíos vs lista de vuelos */}
       {filtered.length === 0 ? (
         <div className="empty">
           <p>No se encontraron vuelos para esa ruta.</p>

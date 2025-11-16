@@ -6,36 +6,33 @@ import Button from "../components/Button";
 import { formatCurrency } from "../utils/format";
 
 /**
- * Reservation confirmation page component that displays flight and passenger information
- * for final review before payment processing.
- * 
- * @returns {JSX.Element} Rendered reservation confirmation page with flight and passenger details
+ * Pagina de confirmacion de reserva que muestra informacion del vuelo y pasajero
+ * para revision final antes del procesamiento del pago
  */
 export default function ReservationConfirm() {
+  // Obtiene el estado de la navegacion y herramientas de enrutamiento
   const { state } = useLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
   const vuelo = state?.vuelo;
   
-  /**
-   * Passenger state management using only user data from auth context
-   */
+  // Estado del pasajero, inicializado con datos del usuario autenticado
   const [pasajero, setPasajero] = useState(user);
 
   /**
-   * Effect hook to check for updated passenger data from profile edits
+   * Efecto que verifica si hay datos actualizados del pasajero en localStorage
+   * provenientes de ediciones de perfil
    */
   useEffect(() => {
     const savedPasajero = localStorage.getItem('updatedPasajero');
     if (savedPasajero) {
       setPasajero(JSON.parse(savedPasajero));
+      // Limpia el almacenamiento despues de usar los datos
       localStorage.removeItem('updatedPasajero');
     }
   }, []);
 
-  /**
-   * Error state handling for missing flight information
-   */
+  // Manejo de estado de error cuando no hay informacion del vuelo
   if (!vuelo) {
     return (
       <main className="page">
@@ -50,7 +47,8 @@ export default function ReservationConfirm() {
   }
 
   /**
-   * Handles navigation to profile editing page for passenger data updates
+   * Maneja la navegacion a la pagina de edicion de perfil
+   * para actualizar datos del pasajero
    */
   const handleUpdateData = () => {
     navigate("/editar-perfil", { 
@@ -63,7 +61,8 @@ export default function ReservationConfirm() {
   };
 
   /**
-   * Handles payment process initiation
+   * Maneja el inicio del proceso de pago
+   * Navega a la pagina de exito de reserva
    */
   const handlePayment = () => {
     navigate("/reserva-exitosa", { 
@@ -78,7 +77,7 @@ export default function ReservationConfirm() {
         <p className="muted">Revisa los datos antes de pagar</p>
       </header>
 
-      {/* Flight information section */}
+      {/* Seccion de informacion del vuelo */}
       <section className="card">
         <h3>Vuelo</h3>
         <p><strong>{vuelo.id}</strong> — {vuelo.origen} → {vuelo.destino}</p>
@@ -86,7 +85,7 @@ export default function ReservationConfirm() {
         <p>{vuelo.aerolinea} • {formatCurrency(vuelo.precio)}</p>
       </section>
 
-      {/* Passenger information section with update capability */}
+      {/* Seccion de informacion del pasajero con capacidad de actualizacion */}
       <section className="card">
         <h3>Pasajero</h3>
         <p><strong>Nombre:</strong> {pasajero?.nombre}</p>
@@ -102,7 +101,7 @@ export default function ReservationConfirm() {
         </div>
       </section>
 
-      {/* Payment action section */}
+      {/* Seccion de accion de pago */}
       <div className="actions" style={{ marginTop: "2rem", textAlign: "center" }}>
         <Button onClick={handlePayment} variant="primary">
           Pagar {formatCurrency(vuelo.precio)}
