@@ -1,6 +1,14 @@
-[build]
-builder = "dockerfile"
-dockerfilePath = "backend/backend/Dockerfile"
+# railway.toml
+# This file defines multiple services within a single Railway project
 
-[deploy]
-startCommand = "java -jar app.jar"
+[[service]]
+name = "backend"
+root = "backend/backend"
+build = { dockerfile = "Dockerfile" } # Path to Dockerfile relative to 'root'
+deploy = { startCommand = "java -jar app.jar" }
+
+[[service]]
+name = "frontend"
+root = "frontend"
+# No specific build/deploy commands needed here as Vercel will handle the frontend.
+# This entry primarily helps Railway understand the monorepo structure.
