@@ -3,10 +3,10 @@ FROM maven:3.9.6-eclipse-temurin-21-alpine AS build
 WORKDIR /app
 
 # Copiar los archivos del backend específico
-COPY pom.xml .
+COPY backend/pom.xml .
 RUN mvn dependency:go-offline
 
-COPY src ./src
+COPY backend/src ./src
 RUN mvn package -DskipTests
 
 # Use a smaller JRE image to run the application
