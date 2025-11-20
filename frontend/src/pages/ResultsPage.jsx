@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import Button from "../components/Button";
 import { formatCurrency } from "../utils/format";
 import { hasCompleteProfile } from "../utils/validators";
+import { getFlights } from '../utils/api';
 import { getCityName } from '../data/cities';
 import './ResultsPage.css';
 
@@ -22,14 +23,10 @@ export default function ResultsPage() {
   useEffect(() => {
     const fetchFlights = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/vuelos');
-        if (!response.ok) {
-          throw new Error('No se pudo conectar con el servidor para obtener los vuelos.');
-        }
-        const data = await response.json();
+        const data = await getFlights();
         setFlights(data);
       } catch (err) {
-        setError(err.message);
+        setError('No se pudo conectar con el servidor para obtener los vuelos.');
       } finally {
         setLoading(false);
       }
