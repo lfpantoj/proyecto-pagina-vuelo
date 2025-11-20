@@ -33,7 +33,7 @@ export default function FormSelect({
       <select
         id={id}
         name={name}
-        value={value}
+        defaultValue={value} // Use defaultValue to allow internal state management after initial render
         onChange={onChange}
         className={selectClass}
         required={required}
@@ -48,7 +48,7 @@ export default function FormSelect({
       >
         {/* Opción placeholder si está definida */}
         {placeholder && (
-          <option value="">{placeholder}</option>
+          <option value="" disabled selected hidden>{placeholder}</option>
         )}
         {/* Renderiza las opciones del dropdown */}
         {options.map(option => (

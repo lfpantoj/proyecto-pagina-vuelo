@@ -213,6 +213,11 @@ label, p, input, select, button, a {
   transform: translateY(-2px);
 }
 
+.btn--logout {
+  background: transparent;
+  border: 1px solid white;
+}
+
 .btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;

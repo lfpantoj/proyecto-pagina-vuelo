@@ -119,8 +119,7 @@ export default function Header() {
             {/* Botón para cerrar sesión */}
             <button
               onClick={handleLogout}
-              className="btn btn--secondary"
-              style={{ background: 'transparent', border: '1px solid white' }}
+              className="btn btn--secondary btn--logout"
             >
               Cerrar Sesión
             </button>
