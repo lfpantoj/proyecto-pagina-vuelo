@@ -1,0 +1,136 @@
+/* src/pages/ResultsPage.css */
+.results-page {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.results-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid #e1e5e9;
+  padding-bottom: 1.5rem;
+}
+
+.results-header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.results-header .muted {
+  font-size: 1.2rem;
+  color: #6c757d;
+}
+
+.flight-card {
+  background-color: #fff;
+  border: 1px solid #e1e5e9;
+  border-radius: 16px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.flight-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.flight-card__content {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
+  gap: 1.5rem;
+}
+
+.flight-path {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flight-path__location {
+  text-align: center;
+}
+
+.flight-path__label {
+  font-size: 0.75rem;
+  color: #6c757d;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.flight-path__time {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #0c3956;
+}
+
+.flight-path__city {
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+.flight-path__line {
+  flex-grow: 1;
+  height: 2px;
+  background-color: #e1e5e9;
+  margin: 0 1rem;
+  position: relative;
+}
+
+.flight-path__plane {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.2rem; /* Adjusted for arrow */
+  color: #6c757d; /* Changed to match muted text */
+}
+
+.flight-card__action {
+  flex-shrink: 0;
+  text-align: center;
+  border-left: 1px solid #e1e5e9;
+  padding-left: 1.5rem;
+}
+
+.flight-card__action .price {
+  font-size: 1.125rem; /* Smaller price */
+  font-weight: 700;
+  color: #0c3956;
+  margin-bottom: 0.5rem;
+}
+
+.flight-card__action .seats {
+  font-size: 0.6rem;
+  color: #28a745;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .results-page {
+    padding: 1rem;
+  }
+  .flight-card__content {
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+  }
+  .flight-path {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  .flight-card__action {
+    width: 100%;
+    border-left: none;
+    padding-left: 0;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e1e5e9;
+  }
+}

@@ -3,6 +3,8 @@ import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Button from "../components/Button";
 import { formatCurrency } from "../utils/format";
+import { getCityName } from "../data/cities";
+import "./ReservationConfirm.css"; // Reusing the same styles
 
 /**
  * Componente de icono SVG para indicador visual de confirmación exitosa
@@ -35,10 +37,10 @@ const CheckCircle = ({ size = 48, className = "" }) => (
 export default function ReservationSuccess() {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { vuelo, pasajero } = state || {};
+  const { vuelo, pasajero, cantidad, reserva } = state || {};
 
   // Maneja el estado de error cuando faltan datos de reserva
-  if (!vuelo || !pasajero) {
+  if (!vuelo || !pasajero || !reserva) {
     return (
       <main className="page">
         <div className="error">
@@ -51,18 +53,7 @@ export default function ReservationSuccess() {
     );
   }
 
-  // Objeto de datos de confirmación de reserva
-  const reserva = {
-    // Genera un número de reserva único
-    numero: Math.random().toString(36).slice(2, 9).toUpperCase(),
-    // Formatea la fecha de reserva en español colombiano
-    fechaReserva: new Date().toLocaleDateString("es-CO", { 
-      year: "numeric", 
-      month: "short", 
-      day: "numeric" 
-    }),
-    estado: "Confirmada",
-  };
+  const total = vuelo.precio * cantidad;
 
   return (
     <main className="page">
@@ -71,38 +62,50 @@ export default function ReservationSuccess() {
         <CheckCircle size={48} className="icon-success" />
         <div>
           <h1>Reserva confirmada</h1>
-          <p className="muted">Número: {reserva.numero}</p>
+          <p className="muted">Número: {reserva.id}</p>
         </div>
       </header>
 
-      {/* Sección de detalles del vuelo con etiquetado accesible */}
-      <section className="card" aria-labelledby="vuelo-title">
-        <h3 id="vuelo-title">Vuelo</h3>
-        <p>
-          <strong>{vuelo.id}</strong> — {vuelo.origen} → {vuelo.destino}
-        </p>
-        <p>
-          {vuelo.fecha} • {vuelo.salida} - {vuelo.llegada}
-        </p>
-        <p>
-          {vuelo.aerolinea} • {formatCurrency(vuelo.precio)}
-        </p>
-      </section>
-
-      {/* Sección de información del pasajero */}
-      <section className="card" aria-labelledby="pasajero-title">
-        <h3 id="pasajero-title">Pasajero</h3>
-        <p><strong>Nombre:</strong> {pasajero.nombre}</p>
-        <p><strong>Documento:</strong> {pasajero.documento}</p>
-        <p><strong>Email:</strong> {pasajero.correo}</p>
-      </section>
+      <div className="card-group">
+        {/* Sección combinada de detalles del vuelo y pasajero */}
+        <section className="card flight-passenger-details-card">
+          <h3 id="vuelo-title">Detalles del Vuelo y Pasajero</h3>
+          <div className="flight-details-route">
+            <div className="route-city">
+              <span className="route-label">Origen</span>
+              <span className="route-name">{getCityName(vuelo.origen)}</span>
+            </div>
+            <div className="route-arrow">→</div>
+            <div className="route-city">
+              <span className="route-label">Destino</span>
+              <span className="route-name">{getCityName(vuelo.destino)}</span>
+            </div>
+          </div>
+          <div className="flight-details-info">
+            <p><strong>Fecha:</strong> {vuelo.fecha}</p>
+            <p><strong>Salida:</strong> {vuelo.horaSalida}</p>
+            <p><strong>Llegada:</strong> {vuelo.horaLlegada}</p>
+            <p><strong>Aerolínea:</strong> {vuelo.aerolinea || 'N/A'}</p>
+          </div>
+          <hr style={{margin: '1.5rem 0', border: 'none', borderTop: '1px solid #eee'}} />
+          <h4 style={{marginBottom: '1rem'}}>Pasajero Principal</h4>
+          <div className="passenger-details-info">
+            <p><strong>Nombre:</strong> {pasajero.nombre}</p>
+            <p><strong>Documento:</strong> {pasajero.documento}</p>
+            <p><strong>Email:</strong> {pasajero.correo}</p>
+          </div>
+        </section>
+      </div>
 
       {/* Sección de metadatos de la reserva */}
-      <section className="card" aria-labelledby="reserva-title">
+      <section className="card passenger-details-card" aria-labelledby="reserva-title" style={{marginTop: '2rem'}}>
         <h3 id="reserva-title">Información de la Reserva</h3>
-        <p><strong>Número de reserva:</strong> {reserva.numero}</p>
-        <p><strong>Fecha de reserva:</strong> {reserva.fechaReserva}</p>
-        <p><strong>Estado:</strong> {reserva.estado}</p>
+        <div className="passenger-details-info">
+          <p><strong>Número de reserva:</strong> {reserva.id}</p>
+          <p><strong>Pasajeros:</strong> {cantidad}</p>
+          <p><strong>Total Pagado:</strong> {formatCurrency(total)}</p>
+          <p><strong>Estado:</strong> {reserva.estado}</p>
+        </div>
       </section>
 
       {/* Botones de acción posteriores a la reserva */}

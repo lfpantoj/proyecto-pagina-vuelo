@@ -16,12 +16,13 @@ public class Vuelo {
     private String horaSalida;
     private String horaLlegada;
     private String fecha;  
+    private String aerolinea;
 
 
     public Vuelo() {
     }
 
-    public Vuelo(String origen, String destino, double precio, String horaSalida, String horaLlegada, int disponibles, String fecha) {
+    public Vuelo(String origen, String destino, double precio, String horaSalida, String horaLlegada, int disponibles, String fecha, String aerolinea) {
         this.disponibles=disponibles;
         this.fecha=fecha;
         this.origen = origen;
@@ -29,12 +30,21 @@ public class Vuelo {
         this.precio = precio;
         this.horaSalida = horaSalida;
         this.horaLlegada = horaLlegada;
+        this.aerolinea = aerolinea;
     }
 
     // GETTERS Y SETTERS
+    public String getAerolinea() {
+        return aerolinea;
+    }
+
+    public void setAerolinea(String aerolinea) {
+        this.aerolinea = aerolinea;
+    }
     public int getDisponibles() {
         return disponibles;
     }
+
 
     public void setDisponibles(int disponibles) {
         this.disponibles = disponibles;

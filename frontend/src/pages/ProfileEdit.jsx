@@ -38,29 +38,27 @@ export default function ProfileEdit() {
   const onSubmit = async (formData) => {
     // Simula delay de procesamiento
     await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // Construye objeto de pasajero actualizado
-    const updatedPasajero = {
-      documento: formData.numeroDocumento,
-      nombre: `${formData.primerNombre} ${formData.segundoNombre || ''} ${formData.primerApellido} ${formData.segundoApellido || ''}`.trim().replace(/\s+/g, ' '),
-      correo: formData.correo,
-      celular: formData.numeroCelular,
-      nacimiento: formData.fechaNacimiento
+
+    const userData = {
+        ...formData,
+        username: user.username
     };
-    
+
     // Actualiza perfil en contexto de autenticación
-    updateProfile(updatedPasajero);
-    
-    // Guarda datos temporalmente si viene desde confirmación
-    if (fromConfirmation) {
-      localStorage.setItem('updatedPasajero', JSON.stringify(updatedPasajero));
-    }
-    
-    // Redirige según el contexto de uso
-    if (requireCompleteProfile && vuelo) {
-      navigate("/confirmar-reserva", { state: { vuelo } });
-    } else {
-      navigate(returnTo || "/buscar");
+    const result = await updateProfile(userData);
+
+    if(result.success){
+        // Guarda datos temporalmente si viene desde confirmación
+        if (fromConfirmation) {
+            localStorage.setItem('updatedPasajero', JSON.stringify(result.user));
+        }
+
+        // Redirige según el contexto de uso
+        if (requireCompleteProfile && vuelo) {
+            navigate("/confirmar-reserva", { state: { vuelo } });
+        } else {
+            navigate(returnTo || "/buscar");
+        }
     }
   };
 

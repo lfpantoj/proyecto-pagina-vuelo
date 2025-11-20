@@ -9,6 +9,7 @@ import ResultsPage from "./pages/ResultsPage";
 import ReservationConfirm from "./pages/ReservationConfirm";
 import ReservationSuccess from "./pages/ReservationSuccess";
 import ProfileEdit from "./pages/ProfileEdit";
+import MyReservations from "./pages/MyReservations";
 
 // Páginas de autenticación
 import LoginPage from "./pages/Auth/LoginPage";
@@ -115,6 +116,14 @@ function AppContent() {
             element={
               <ProtectedRoute>
                 <ProfileEdit />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/mis-reservas" 
+            element={
+              <ProtectedRoute>
+                <MyReservations />
               </ProtectedRoute>
             } 
           />

@@ -1,7 +1,6 @@
 // pages/Admin/PassengersList.jsx
-import React, { useState } from "react";
-import { flights } from "../../data/flights";
-import { passengersByFlight } from "../../data/passenger";
+import React, { useState, useEffect } from "react";
+import { getFlights, getReservationsByFlight, downloadPassengersPDF } from "../../utils/api";
 import Button from "../../components/Button";
 import FormSelect from "../../components/FormSelect";
 
@@ -12,17 +11,63 @@ import FormSelect from "../../components/FormSelect";
  */
 export default function PassengersList() {
   const [selectedFlight, setSelectedFlight] = useState("");
+  const [flights, setFlights] = useState([]);
+  const [passengers, setPassengers] = useState([]);
+  const [loadingPdf, setLoadingPdf] = useState(false);
+  const [errorPdf, setErrorPdf] = useState(null);
 
-  const selectedPassengers = selectedFlight ? passengersByFlight[selectedFlight] || [] : [];
+  useEffect(() => {
+    const fetchFlights = async () => {
+      try {
+        const flightsData = await getFlights();
+        setFlights(flightsData);
+      } catch (error) {
+        console.error("Error fetching flights:", error);
+      }
+    };
+    fetchFlights();
+  }, []);
 
-  const handleDownloadPDF = () => {
+  useEffect(() => {
+    if (selectedFlight) {
+      const fetchPassengers = async () => {
+        try {
+          const reservations = await getReservationsByFlight(selectedFlight);
+          const passengersData = reservations.map(r => r.usuario);
+          setPassengers(passengersData);
+        } catch (error) {
+          console.error("Error fetching passengers:", error);
+        }
+      };
+      fetchPassengers();
+    } else {
+      setPassengers([]);
+    }
+  }, [selectedFlight]);
+
+  const handleDownloadPDF = async () => {
     if (!selectedFlight) {
       alert("Por favor selecciona un vuelo primero");
       return;
     }
-    // Simular descarga de PDF
-    alert(`Descargando lista de pasajeros para vuelo ${selectedFlight}...`);
-    console.log("Generando PDF con pasajeros:", selectedPassengers);
+    setLoadingPdf(true);
+    setErrorPdf(null);
+    try {
+      const pdfBlob = await downloadPassengersPDF(selectedFlight);
+      const url = window.URL.createObjectURL(new Blob([pdfBlob]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `pasajeros_vuelo_${selectedFlight}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      setErrorPdf("Error al descargar el PDF.");
+      console.error("Error downloading PDF:", error);
+    } finally {
+      setLoadingPdf(false);
+    }
   };
 
   const flightOptions = flights.map(flight => ({
@@ -41,7 +86,7 @@ export default function PassengersList() {
           name="flightSelect"
           value={selectedFlight}
           onChange={(e) => setSelectedFlight(e.target.value)}
-          options={[{ value: "", label: "Seleccione un vuelo" }, ...flightOptions]}
+          options={flightOptions}
           placeholder="Seleccione un vuelo"
         />
 
@@ -49,44 +94,48 @@ export default function PassengersList() {
           <Button 
             variant="primary" 
             onClick={handleDownloadPDF}
-            disabled={!selectedFlight}
+            disabled={!selectedFlight || loadingPdf}
+            loading={loadingPdf}
           >
-            Descargar PDF de Pasajeros
+            {loadingPdf ? 'Descargando...' : 'Descargar PDF de Pasajeros'}
           </Button>
         </div>
+        {errorPdf && <div className="form-error" style={{marginTop: '1rem'}}>{errorPdf}</div>}
       </div>
 
       {selectedFlight && (
         <div style={{ marginTop: "2rem" }}>
           <h2>Pasajeros - Vuelo {selectedFlight}</h2>
           
-          {selectedPassengers.length === 0 ? (
+          {passengers.length === 0 ? (
             <div className="empty">
               <p>No hay pasajeros registrados para este vuelo.</p>
             </div>
           ) : (
-            <table className="results-table" aria-label={`Pasajeros del vuelo ${selectedFlight}`}>
-              <thead>
-                <tr>
-                  <th>Documento</th>
-                  <th>Nombre</th>
-                  <th>Email</th>
-                  <th>Celular</th>
-                  <th>Fecha Nacimiento</th>
-                </tr>
-              </thead>
-              <tbody>
-                {selectedPassengers.map((pasajero, index) => (
-                  <tr key={index}>
-                    <td>{pasajero.documento}</td>
-                    <td>{pasajero.nombre}</td>
-                    <td>{pasajero.correo}</td>
-                    <td>{pasajero.celular}</td>
-                    <td>{pasajero.nacimiento}</td>
+            <div className="table-container">
+              <table className="results-table" aria-label={`Pasajeros del vuelo ${selectedFlight}`}>
+                <thead>
+                  <tr>
+                    <th>Documento</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Celular</th>
+                    <th>Fecha Nacimiento</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {passengers.map((pasajero, index) => (
+                    <tr key={index}>
+                      <td>{pasajero.numeroDocumento}</td>
+                      <td>{`${pasajero.primerNombre} ${pasajero.segundoNombre || ''} ${pasajero.primerApellido} ${pasajero.segundoApellido || ''}`.trim()}</td>
+                      <td>{pasajero.username}</td>
+                      <td>{pasajero.numeroCelular}</td>
+                      <td>{pasajero.fechaNacimiento}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
       )}

@@ -5,6 +5,7 @@ import Button from "../../components/Button";
 import FormInput from "../../components/FormInput";
 import { registerSchema, REGISTER_FIELDS } from "../../utils/validationSchemas";
 import { useForm } from "../../hooks/useForm";
+import { register } from "../../utils/api";
 
 /**
  * Página de registro de nuevos usuarios
@@ -15,11 +16,15 @@ export default function RegisterPage() {
   
   // Función que maneja el envío del formulario de registro
   const onSubmit = async (formData) => {
-    // Simula delay de red para procesar registro
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    console.log("Registro exitoso:", formData);
-    // Redirige a página de login tras registro exitoso
-    navigate("/login");
+    try {
+      await register(formData);
+      console.log("Registro exitoso:", formData);
+      // Redirige a página de login tras registro exitoso
+      navigate("/login");
+    } catch (error) {
+      console.error("Error en el registro:", error);
+      // Aquí puedes manejar el error, por ejemplo, mostrando un mensaje al usuario
+    }
   };
 
   // Hook personalizado para manejo de estado y validación del formulario

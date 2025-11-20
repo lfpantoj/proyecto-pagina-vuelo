@@ -118,16 +118,19 @@ export const filterInput = (value, fieldType) => {
 export const hasCompleteProfile = (user) => {
   if (!user) return false;
   
+  // Checks based on the JWT claims
   return (
-    user.documento &&
-    user.nombre &&
-    user.correo &&
-    user.celular &&
-    user.nacimiento &&
-    isValidDocumentNumber(user.documento, "CC") &&
-    isValidName(user.nombre) &&
-    isValidEmail(user.correo) &&
-    isValidPhone(user.celular) &&
-    isValidBirthDate(user.nacimiento)
+    nonEmpty(user.primerNombre) &&
+    nonEmpty(user.primerApellido) &&
+    nonEmpty(user.numeroDocumento) &&
+    nonEmpty(user.numeroCelular) &&
+    nonEmpty(user.fechaNacimiento) &&
+    nonEmpty(user.username) &&
+    isValidName(user.primerNombre) &&
+    isValidName(user.primerApellido) &&
+    isValidDocumentNumber(user.numeroDocumento, user.tipoDocumento || "CC") &&
+    isValidPhone(user.numeroCelular) &&
+    isValidBirthDate(user.fechaNacimiento) &&
+    isValidEmail(user.username)
   );
 };

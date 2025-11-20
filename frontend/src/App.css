@@ -107,6 +107,7 @@ label, p, input, select, button, a {
 .form-field {
   display: flex;
   flex-direction: column;
+  margin-bottom: 1rem;
 }
 
 .form-label {
@@ -582,9 +583,15 @@ label, p, input, select, button, a {
     padding: 0.6rem 0;
     width: 100%;
   }
+
+  .table-container {
+    overflow-x: auto;
+    width: 100%;
+  }
   
   .results-table {
     font-size: 0.85rem;
+    min-width: 700px;
   }
   
   .results-table th, 

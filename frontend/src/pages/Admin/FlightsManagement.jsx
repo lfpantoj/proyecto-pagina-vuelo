@@ -1,7 +1,7 @@
 // pages/Admin/FlightsManagement.jsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { flights } from "../../data/flights";
+import { getFlights, deleteFlight, downloadFlightsPDF } from "../../utils/api";
 import Button from "../../components/Button";
 import { formatCurrency } from "../../utils/format";
 
@@ -12,16 +12,32 @@ import { formatCurrency } from "../../utils/format";
  */
 export default function FlightsManagement() {
   const navigate = useNavigate();
+  const [flights, setFlights] = useState([]);
+
+  useEffect(() => {
+    const fetchFlights = async () => {
+      try {
+        const flightsData = await getFlights();
+        setFlights(flightsData);
+      } catch (error) {
+        console.error("Error fetching flights:", error);
+      }
+    };
+    fetchFlights();
+  }, []);
 
   const handleEdit = (vuelo) => {
     navigate("/admin/vuelos-editar", { state: { vuelo } });
   };
 
-  const handleDelete = (vueloId) => {
+  const handleDelete = async (vueloId) => {
     if (window.confirm("¿Estás seguro de que quieres eliminar este vuelo?")) {
-      console.log("Vuelo eliminado:", vueloId);
-      // Nota: En una implementación real, aquí se haría una llamada a la API
-      // o se actualizaría el estado global. Por ahora solo muestra en consola.
+      try {
+        await deleteFlight(vueloId);
+        setFlights(flights.filter((vuelo) => vuelo.id !== vueloId));
+      } catch (error) {
+        console.error("Error deleting flight:", error);
+      }
     }
   };
 
@@ -29,10 +45,21 @@ export default function FlightsManagement() {
     navigate("/admin/vuelos-crear");
   };
 
-  const handleDownloadPDF = () => {
-    // Simular descarga de PDF
-    alert("Descargando informe PDF de vuelos...");
-    console.log("Generando PDF con vuelos:", flights);
+  const handleDownloadPDF = async () => {
+    try {
+      const blob = await downloadFlightsPDF();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'reporte_vuelos.pdf';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+      alert("Error al descargar el informe PDF.");
+    }
   };
 
   return (
@@ -54,51 +81,55 @@ export default function FlightsManagement() {
           <p>No hay vuelos registrados.</p>
         </div>
       ) : (
-        <table className="results-table" aria-label="Lista de vuelos">
-          <thead>
-            <tr>
-              <th>Número</th>
-              <th>Aerolínea</th>
-              <th>Ruta</th>
-              <th>Fecha</th>
-              <th>Horario</th>
-              <th>Precio</th>
-              <th>Asientos</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {flights.map((vuelo) => (
-              <tr key={vuelo.id}>
-                <td>{vuelo.id}</td>
-                <td>{vuelo.aerolinea}</td>
-                <td>{vuelo.origen} → {vuelo.destino}</td>
-                <td>{vuelo.fecha}</td>
-                <td>{vuelo.salida} - {vuelo.llegada}</td>
-                <td>{formatCurrency(vuelo.precio)}</td>
-                <td>{vuelo.asientos}</td>
-                <td>
-                  <div className="actions">
-                    <Button 
-                      variant="secondary" 
-                      onClick={() => handleEdit(vuelo)}
-                      style={{ marginRight: "0.5rem", padding: "0.5rem 1rem" }}
-                    >
-                      Editar
-                    </Button>
-                    <Button 
-                      variant="secondary" 
-                      onClick={() => handleDelete(vuelo.id)}
-                      style={{ padding: "0.5rem 1rem" }}
-                    >
-                      Eliminar
-                    </Button>
-                  </div>
-                </td>
+        <div className="table-container">
+          <table className="results-table" aria-label="Lista de vuelos">
+            <thead>
+              <tr>
+                <th>Número</th>
+                <th>Ruta</th>
+                <th>Aerolínea</th>
+                <th>Fecha</th>
+                <th>Hora de Salida</th>
+                <th>Hora de Llegada</th>
+                <th>Precio</th>
+                <th>Disponibles</th>
+                <th>Acciones</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {flights.map((vuelo) => (
+                <tr key={vuelo.id}>
+                  <td>{vuelo.id}</td>
+                  <td>{vuelo.origen} → {vuelo.destino}</td>
+                  <td>{vuelo.aerolinea}</td>
+                  <td>{vuelo.fecha}</td>
+                  <td>{vuelo.horaSalida}</td>
+                  <td>{vuelo.horaLlegada}</td>
+                  <td>{formatCurrency(vuelo.precio)}</td>
+                  <td>{vuelo.disponibles}</td>
+                  <td>
+                    <div className="actions">
+                      <Button 
+                        variant="secondary" 
+                        onClick={() => handleEdit(vuelo)}
+                        style={{ marginRight: "0.5rem", padding: "0.5rem 1rem" }}
+                      >
+                        Editar
+                      </Button>
+                      <Button 
+                        variant="secondary" 
+                        onClick={() => handleDelete(vuelo.id)}
+                        style={{ padding: "0.5rem 1rem" }}
+                      >
+                        Eliminar
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </main>
   );

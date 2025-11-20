@@ -1,42 +1,48 @@
-// src/pages/ResultsPage.jsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { flights } from "../data/flights";
 import Button from "../components/Button";
 import { formatCurrency } from "../utils/format";
 import { hasCompleteProfile } from "../utils/validators";
+import { getCityName } from '../data/cities';
+import './ResultsPage.css';
 
-/**
- * Página de resultados de búsqueda de vuelos
- * Muestra vuelos filtrados según criterios de búsqueda y maneja el proceso de reserva
- * con validación de autenticación y perfil de usuario
- */
 export default function ResultsPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuth();
-  // Obtiene parámetros de búsqueda del estado de navegación
   const search = location.state || {};
 
-  // Extrae parámetros de búsqueda con valores por defecto
   const { origen = "", destino = "", fechaIda = "" } = search;
 
-  /**
-   * Filtra vuelos disponibles según criterios de búsqueda
-   * Coincide por origen, destino y fecha de salida
-   */
+  const [flights, setFlights] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchFlights = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/vuelos');
+        if (!response.ok) {
+          throw new Error('No se pudo conectar con el servidor para obtener los vuelos.');
+        }
+        const data = await response.json();
+        setFlights(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFlights();
+  }, []);
+
   const filtered = flights.filter(
     (f) => f.origen === origen && f.destino === destino && f.fecha === fechaIda
   );
 
-  /**
-   * Maneja el inicio del proceso de reserva de vuelo
-   * Implementa validación en tres pasos: autenticación, perfil completo y confirmación
-   * @param {Object} vuelo - Objeto de vuelo seleccionado para reserva
-   */
   const reservar = (vuelo) => {
-    // Paso 1: Verifica si el usuario está autenticado
     if (!user) {
       navigate("/login", { 
         state: { 
@@ -46,7 +52,6 @@ export default function ResultsPage() {
         } 
       });
     } 
-    // Paso 2: Verifica que el perfil de usuario esté completo
     else if (!hasCompleteProfile(user)) {
       navigate("/editar-perfil", { 
         state: { 
@@ -57,58 +62,67 @@ export default function ResultsPage() {
         } 
       });
     }
-    // Paso 3: Navega a la página de confirmación de reserva
     else {
-      navigate("/confirmar-reserva", { state: { vuelo } });
+      navigate("/confirmar-reserva", { state: { vuelo, pasajeros: search.pasajeros } });
     }
   };
 
-  return (
-    <main className="page">
-      <h1>Resultados</h1>
-      <p className="muted">
-        {origen} → {destino} • {fechaIda}
-      </p>
+  if (loading) {
+    return <main className="page"><p>Cargando vuelos...</p></main>;
+  }
 
-      {/* Manejo de estados: resultados vacíos vs lista de vuelos */}
+  if (error) {
+    return <main className="page"><p>Error: {error}</p></main>;
+  }
+
+  return (
+    <main className="page results-page">
+      <div className="results-header">
+        <h1>Vuelos Disponibles</h1>
+        <p className="muted">
+          {getCityName(origen)} → {getCityName(destino)} • {fechaIda}
+        </p>
+      </div>
+
       {filtered.length === 0 ? (
         <div className="empty">
-          <p>No se encontraron vuelos para esa ruta.</p>
+          <p>No se encontraron vuelos para la ruta y fecha seleccionadas.</p>
           <Button variant="secondary" onClick={() => navigate("/")}>
             Volver a buscar
           </Button>
         </div>
       ) : (
-        <table className="results-table" aria-label="Resultados de vuelos">
-          <thead>
-            <tr>
-              <th>Número</th>
-              <th>Aerolínea</th>
-              <th>Fecha</th>
-              <th>Salida</th>
-              <th>Llegada</th>
-              <th>Precio</th>
-              <th>Asientos</th>
-              <th>Acción</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((v) => (
-              <tr key={v.id}>
-                <td>{v.id}</td>
-                <td>{v.aerolinea}</td>
-                <td>{v.fecha}</td>
-                <td>{v.salida}</td>
-                <td>{v.llegada}</td>
-                <td>{formatCurrency(v.precio)}</td>
-                <td>{v.asientos}</td>
-                <td>
-                  <Button onClick={() => reservar(v)}>Reservar</Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="flights-list">
+          {filtered.map((v) => (
+            <div key={v.id} className="flight-card">
+              <div className="flight-card__content">
+                <div className="flight-path">
+                  <div className="flight-path__location">
+                    <p className="flight-path__label">Origen</p>
+                    <p className="flight-path__time">{v.horaSalida}</p>
+                    <p className="flight-path__city">{getCityName(v.origen)}</p>
+                  </div>
+                  <div className="flight-path__line">
+                    <span className="flight-path__plane">→</span>
+                  </div>
+                  <div className="flight-path__location">
+                    <p className="flight-path__label">Destino</p>
+                    <p className="flight-path__time">{v.horaLlegada}</p>
+                    <p className="flight-path__city">{getCityName(v.destino)}</p>
+                  </div>
+                </div>
+
+                <div className="flight-card__action">
+                  <p className="price">{formatCurrency(v.precio)}</p>
+                  <span className="seats">{v.disponibles} asientos</span>
+                  <Button onClick={() => reservar(v)} variant="primary">
+                    Reservar
+                  </Button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
     </main>
   );

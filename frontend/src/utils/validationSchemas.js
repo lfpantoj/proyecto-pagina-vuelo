@@ -264,13 +264,16 @@ export const getProfileInitialState = (pasajeroInicial, user) => {
     };
   } else if (user) {
     return {
-      tipoDocumento: "CC",
-      numeroDocumento: user.documento || "",
-      ...parseNombreCompleto(user.nombre),
-      numeroCelular: user.celular || "",
-      fechaNacimiento: user.nacimiento || "",
-      correo: user.correo || "",
-      confirmarCorreo: user.correo || "",
+      tipoDocumento: user.tipoDocumento || "CC",
+      numeroDocumento: user.numeroDocumento || "",
+      primerNombre: user.primerNombre || "",
+      segundoNombre: user.segundoNombre || "",
+      primerApellido: user.primerApellido || "",
+      segundoApellido: user.segundoApellido || "",
+      numeroCelular: user.numeroCelular || "",
+      fechaNacimiento: user.fechaNacimiento || "",
+      correo: user.username || "",
+      confirmarCorreo: user.username || "",
       contrasena: "",
       confirmarContrasena: "",
     };
@@ -318,15 +321,14 @@ export const validateField = (field, value, form, schema) => {
 
 // Esquema de validación para formulario de vuelos
 export const flightSchema = {
-  id: (value) => !value ? "El ID del vuelo es requerido" : null,
-  aerolinea: (value) => !value ? "La aerolínea es requerida" : null,
   origen: (value) => !value ? "El origen es requerido" : null,
   destino: (value) => !value ? "El destino es requerido" : null,
   fecha: (value) => !value ? "La fecha es requerida" : null,
-  salida: (value) => !value ? "La hora de salida es requerida" : null,
-  llegada: (value) => !value ? "La hora de llegada es requerida" : null,
+  horaSalida: (value) => !value ? "La hora de salida es requerida" : null,
+  horaLlegada: (value) => !value ? "La hora de llegada es requerida" : null,
+  aerolinea: (value) => !value ? "La aerolínea es requerida" : null,
   precio: (value) => !value || value <= 0 ? "El precio debe ser mayor a 0" : null,
-  asientos: (value) => !value || value < 0 ? "Los asientos no pueden ser negativos" : null
+  disponibles: (value) => !value || value < 0 ? "Los asientos no pueden ser negativos" : null
 };
 
 // Configuración de campos para formulario de login
@@ -343,7 +345,7 @@ export const LOGIN_FIELDS = [
     name: "contrasena",
     label: "Contraseña",
     type: "password", 
-    hint: "Mínimo 6 caracteres",
+    hint: "Ingresa tu contraseña",
     autoComplete: "current-password",
     fieldType: "password"
   }
@@ -394,5 +396,10 @@ export const searchSchema = {
     if (value === form.origen) return "El destino no puede ser igual al origen";
     return null;
   },
-  fechaIda: (value) => !value ? "Selecciona una fecha de viaje" : null
+  fechaIda: (value) => !value ? "Selecciona una fecha de viaje" : null,
+  pasajeros: (value) => {
+    if (!value) return "El número de pasajeros es requerido";
+    if (isNaN(value) || value < 1) return "Debe ser al menos 1 pasajero";
+    return null;
+  }
 };

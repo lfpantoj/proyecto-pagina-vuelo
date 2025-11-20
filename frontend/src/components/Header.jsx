@@ -96,14 +96,24 @@ export default function Header() {
                 Administración
               </Link>
             ) : (
-              <Link
-                to="/editar-perfil"
-                className={isActive("/editar-perfil") ? "active" : ""}
-                onClick={closeMenu}
-                aria-current={isActive("/editar-perfil") ? "page" : undefined}
-              >
-                Mi Perfil
-              </Link>
+              <>
+                <Link
+                  to="/editar-perfil"
+                  className={isActive("/editar-perfil") ? "active" : ""}
+                  onClick={closeMenu}
+                  aria-current={isActive("/editar-perfil") ? "page" : undefined}
+                >
+                  Mi Perfil
+                </Link>
+                <Link
+                  to="/mis-reservas"
+                  className={isActive("/mis-reservas") ? "active" : ""}
+                  onClick={closeMenu}
+                  aria-current={isActive("/mis-reservas") ? "page" : undefined}
+                >
+                  Mis Reservas
+                </Link>
+              </>
             )}
             
             {/* Botón para cerrar sesión */}
@@ -116,8 +126,8 @@ export default function Header() {
             </button>
           </>
         ) : (
-          {/* Enlaces para usuarios no autenticados */}
           <>
+            {/* Enlaces para usuarios no autenticados */}
             <Link
               to="/registro"
               className={isActive("/registro") ? "active" : ""}

@@ -1,6 +1,7 @@
 package com.vueloscolombia.backend.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.vueloscolombia.backend.repository.*;
 import com.vueloscolombia.backend.model.*;
@@ -36,5 +37,34 @@ public class ReservaService {
 
     public List<Reserva> reservasPorUsuario(Long usuarioId) {
         return reservaRepository.findByUsuarioId(usuarioId);
+    }
+
+    public List<Reserva> reservasPorUsername(String username) {
+        Usuario usuario = usuarioRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + username));
+        return reservaRepository.findByUsuarioId(usuario.getId());
+    }
+
+    public List<Reserva> reservasPorVuelo(Long vueloId) {
+        return reservaRepository.findByVueloId(vueloId);
+    }
+
+    public void eliminarTodasLasReservas() {
+        reservaRepository.deleteAll();
+    }
+
+    @Transactional
+    public void eliminarReserva(Long reservaId, String username) {
+        Reserva reserva = reservaRepository.findById(reservaId)
+                .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
+        if (!reserva.getUsuario().getUsername().equals(username)) {
+            throw new RuntimeException("No autorizado para eliminar esta reserva");
+        }
+
+        Vuelo vuelo = reserva.getVuelo();
+        vuelo.setDisponibles(vuelo.getDisponibles() + reserva.getCantidad());
+        vueloRepository.save(vuelo);
+
+        reservaRepository.deleteById(reservaId);
     }
 }

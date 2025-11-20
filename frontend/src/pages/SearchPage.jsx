@@ -6,22 +6,7 @@ import FormSelect from "../components/FormSelect";
 import FormInput from "../components/FormInput";
 import { useForm } from "../hooks/useForm";
 import { searchSchema } from "../utils/validationSchemas";
-
-// Lista de ciudades disponibles para selección
-const CITIES = [
-  { value: "Bogotá", label: "Bogotá" },
-  { value: "Medellín", label: "Medellín" },
-  { value: "Cali", label: "Cali" },
-  { value: "Cartagena", label: "Cartagena" }
-];
-
-// Opciones de configuración de pasajeros
-const PASSENGER_OPTIONS = [
-  { value: "1 adulto", label: "1 adulto" },
-  { value: "2 adultos", label: "2 adultos" },
-  { value: "3 adultos", label: "3 adultos" },
-  { value: "1 adulto, 1 niño", label: "1 adulto, 1 niño" }
-];
+import { CITIES } from "../data/cities";
 
 /**
  * Página de búsqueda de vuelos con formulario de criterios de búsqueda
@@ -50,7 +35,7 @@ export default function SearchPage() {
       origen: "",
       destino: "",
       fechaIda: "",
-      pasajeros: "1 adulto",
+      pasajeros: 1, // Default a 1 pasajero
     },
     searchSchema,
     onSubmit
@@ -114,13 +99,17 @@ export default function SearchPage() {
             min={minDate}
           />
 
-          <FormSelect
+          <FormInput
             label="Pasajeros"
             id="pasajeros"
             name="pasajeros"
+            type="number"
             value={form.pasajeros}
             onChange={handleChange}
-            options={PASSENGER_OPTIONS}
+            min="1" // Mínimo 1 pasajero
+            required
+            error={submitted ? fieldErrors.pasajeros : undefined}
+            submitted={submitted}
             hint="Número de pasajeros"
           />
         </div>

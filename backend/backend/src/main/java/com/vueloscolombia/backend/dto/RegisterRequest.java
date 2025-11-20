@@ -1,26 +1,9 @@
-package com.vueloscolombia.backend.model;
+package com.vueloscolombia.backend.dto;
 
-import jakarta.persistence.*;
-import java.util.Set;
+public class RegisterRequest {
 
-@Entity
-@Table(name = "usuarios")
-public class Usuario {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(unique = true, nullable = false)
-    private String username;
-
-    @Column(nullable = false)
-    private String password;
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "usuario_roles", joinColumns = @JoinColumn(name = "usuario_id"))
-    @Column(name = "rol")
-    private Set<Rol> roles;
-
+    private String correo;
+    private String contrasena;
     private String tipoDocumento;
     private String numeroDocumento;
     private String primerNombre;
@@ -29,32 +12,42 @@ public class Usuario {
     private String segundoApellido;
     private String numeroCelular;
     private String fechaNacimiento;
+    private String rol; // "usuario" o "admin"
 
-    public Usuario() {}
+    public RegisterRequest() {}
 
-    // getters y setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
-    public Set<Rol> getRoles() { return roles; }
-    public void setRoles(Set<Rol> roles) { this.roles = roles; }
+    // Getters y setters
+
+    public String getCorreo() { return correo; }
+    public void setCorreo(String correo) { this.correo = correo; }
+
+    public String getContrasena() { return contrasena; }
+    public void setContrasena(String contrasena) { this.contrasena = contrasena; }
+
     public String getTipoDocumento() { return tipoDocumento; }
     public void setTipoDocumento(String tipoDocumento) { this.tipoDocumento = tipoDocumento; }
+
     public String getNumeroDocumento() { return numeroDocumento; }
     public void setNumeroDocumento(String numeroDocumento) { this.numeroDocumento = numeroDocumento; }
+
     public String getPrimerNombre() { return primerNombre; }
     public void setPrimerNombre(String primerNombre) { this.primerNombre = primerNombre; }
+
     public String getSegundoNombre() { return segundoNombre; }
     public void setSegundoNombre(String segundoNombre) { this.segundoNombre = segundoNombre; }
+
     public String getPrimerApellido() { return primerApellido; }
     public void setPrimerApellido(String primerApellido) { this.primerApellido = primerApellido; }
+
     public String getSegundoApellido() { return segundoApellido; }
     public void setSegundoApellido(String segundoApellido) { this.segundoApellido = segundoApellido; }
+
     public String getNumeroCelular() { return numeroCelular; }
     public void setNumeroCelular(String numeroCelular) { this.numeroCelular = numeroCelular; }
+
     public String getFechaNacimiento() { return fechaNacimiento; }
     public void setFechaNacimiento(String fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
+
+    public String getRol() { return rol; }
+    public void setRol(String rol) { this.rol = rol; }
 }

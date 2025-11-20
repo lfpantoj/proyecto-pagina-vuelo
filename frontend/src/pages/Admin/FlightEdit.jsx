@@ -1,12 +1,21 @@
-// pages/Admin/FlightEdit.jsx
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Button from "../../components/Button";
 import FormInput from "../../components/FormInput";
 import FormSelect from "../../components/FormSelect";
 import { useForm } from "../../hooks/useForm";
-import { flights, AEROLINEAS, CIUDADES } from "../../data/flights";
+import { createFlight, updateFlight } from "../../utils/api";
 import { flightSchema } from "../../utils/validationSchemas";
+import { AIRLINES } from "../../data/airlines";
+
+const CIUDADES = [
+    { value: "BOG", label: "Bogotá" },
+    { value: "MED", label: "Medellín" },
+    { value: "CAL", label: "Cali" },
+    { value: "CAR", label: "Cartagena" },
+    { value: "BAQ", label: "Barranquilla" },
+    { value: "SMR", label: "Santa Marta" },
+];
 
 export default function FlightEdit() {
   const navigate = useNavigate();
@@ -16,33 +25,21 @@ export default function FlightEdit() {
 
   // Maneja el envío del formulario para crear o actualizar vuelos
   const onSubmit = async (formData) => {
-    // Simula delay de procesamiento
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Recupera vuelos existentes del localStorage o usa datos mock
-    const savedFlights = JSON.parse(localStorage.getItem('flights') || '[]');
-    const currentFlights = savedFlights.length > 0 ? savedFlights : flights;
-    
-    let updatedFlights;
-    
-    // Actualiza vuelo existente o crea uno nuevo
-    if (vuelo) {
-      updatedFlights = currentFlights.map(f => 
-        f.id === vuelo.id ? { ...formData, precio: Number(formData.precio), asientos: Number(formData.asientos) } : f
-      );
-    } else {
-      const newFlight = {
-        ...formData,
-        precio: Number(formData.precio),
-        asientos: Number(formData.asientos)
-      };
-      updatedFlights = [...currentFlights, newFlight];
+    try {
+        const flightData = { 
+            ...formData, 
+            precio: Number(formData.precio), 
+            disponibles: Number(formData.disponibles) 
+        };
+        if (vuelo) {
+            await updateFlight(vuelo.id, flightData);
+        } else {
+            await createFlight(flightData);
+        }
+        navigate("/admin/vuelos");
+    } catch (error) {
+        console.error("Error saving flight:", error);
     }
-    
-    // Guarda los vuelos actualizados en localStorage
-    localStorage.setItem('flights', JSON.stringify(updatedFlights));
-    // Navega de vuelta a la gestión de vuelos
-    navigate("/admin/vuelos");
   };
 
   // Utiliza el hook useForm para manejar estado y validaciones del formulario
@@ -57,15 +54,14 @@ export default function FlightEdit() {
   } = useForm(
     // Estado inicial del formulario: datos del vuelo o valores vacíos
     vuelo || {
-      id: "",
-      aerolinea: "",
       origen: "",
       destino: "",
       fecha: "",
-      salida: "",
-      llegada: "",
+      horaSalida: "",
+      horaLlegada: "",
       precio: "",
-      asientos: ""
+      disponibles: "",
+      aerolinea: ""
     },
     flightSchema,
     onSubmit
@@ -77,37 +73,7 @@ export default function FlightEdit() {
       <h1>{vuelo ? "Editar Vuelo" : "Crear Vuelo"}</h1>
 
       <form onSubmit={handleSubmit} noValidate className="form-container">
-        {/* Primera fila: ID del vuelo y aerolínea */}
-        <div className="form-row">
-          <FormInput
-            label="ID del Vuelo"
-            id="id"
-            name="id"
-            value={form.id}
-            onChange={handleChange}
-            required
-            error={submitted ? fieldErrors.id : undefined}
-            submitted={submitted}
-            placeholder="Ej: AV-801"
-            hint="Formato: AA-123 (Aerolínea-Número)"
-          />
-
-          <FormSelect
-            label="Aerolínea"
-            id="aerolinea"
-            name="aerolinea"
-            value={form.aerolinea}
-            onChange={handleChange}
-            required
-            options={AEROLINEAS}
-            placeholder="Seleccione aerolínea"
-            error={submitted ? fieldErrors.aerolinea : undefined}
-            submitted={submitted}
-            hint="Seleccione la aerolínea operadora"
-          />
-        </div>
-
-        {/* Segunda fila: Origen y destino */}
+        {/* Primera fila: Origen y destino */}
         <div className="form-row">
           <FormSelect
             label="Origen"
@@ -138,7 +104,7 @@ export default function FlightEdit() {
           />
         </div>
 
-        {/* Tercera fila: Fecha y hora de salida */}
+        {/* Segunda fila: Fecha y hora de salida */}
         <div className="form-row">
           <FormInput
             label="Fecha del Vuelo"
@@ -157,29 +123,29 @@ export default function FlightEdit() {
 
           <FormInput
             label="Hora de Salida"
-            id="salida"
-            name="salida"
+            id="horaSalida"
+            name="horaSalida"
             type="time"
-            value={form.salida}
+            value={form.horaSalida}
             onChange={handleChange}
             required
-            error={submitted ? fieldErrors.salida : undefined}
+            error={submitted ? fieldErrors.horaSalida : undefined}
             submitted={submitted}
             hint="Hora local de salida"
           />
         </div>
 
-        {/* Cuarta fila: Hora de llegada y precio */}
+        {/* Tercera fila: Hora de llegada y precio */}
         <div className="form-row">
           <FormInput
             label="Hora de Llegada"
-            id="llegada"
-            name="llegada"
+            id="horaLlegada"
+            name="horaLlegada"
             type="time"
-            value={form.llegada}
+            value={form.horaLlegada}
             onChange={handleChange}
             required
-            error={submitted ? fieldErrors.llegada : undefined}
+            error={submitted ? fieldErrors.horaLlegada : undefined}
             submitted={submitted}
             hint="Hora local de llegada"
           />
@@ -201,17 +167,31 @@ export default function FlightEdit() {
           />
         </div>
 
-        {/* Quinta fila: Asientos disponibles */}
+        {/* Cuarta fila: Aerolínea y Asientos disponibles */}
         <div className="form-row">
-          <FormInput
-            label="Asientos Disponibles"
-            id="asientos"
-            name="asientos"
-            type="number"
-            value={form.asientos}
+          <FormSelect
+            label="Aerolínea"
+            id="aerolinea"
+            name="aerolinea"
+            value={form.aerolinea}
             onChange={handleChange}
             required
-            error={submitted ? fieldErrors.asientos : undefined}
+            options={AIRLINES}
+            placeholder="Seleccione aerolínea"
+            error={submitted ? fieldErrors.aerolinea : undefined}
+            submitted={submitted}
+            hint="Aerolínea que opera el vuelo"
+          />
+
+          <FormInput
+            label="Asientos Disponibles"
+            id="disponibles"
+            name="disponibles"
+            type="number"
+            value={form.disponibles}
+            onChange={handleChange}
+            required
+            error={submitted ? fieldErrors.disponibles : undefined}
             submitted={submitted}
             min="0"
             max="300"
@@ -245,3 +225,4 @@ export default function FlightEdit() {
     </main>
   );
 }
+

@@ -28,11 +28,16 @@ export default function LoginPage() {
     const result = await login(formData.correo, formData.contrasena);
     
     if (result.success) {
-      // Redirige a la página destino o a búsqueda por defecto
-      if (redirectTo) {
-        navigate(redirectTo, { state: { vuelo } });
+      // Si el usuario es admin, redirige al dashboard de admin
+      if (result.user && result.user.roles && result.user.roles.includes('ROLE_ADMIN')) {
+        navigate('/admin');
       } else {
-        navigate("/buscar");
+        // Redirige a la página destino o a búsqueda por defecto para otros usuarios
+        if (redirectTo) {
+          navigate(redirectTo, { state: { vuelo } });
+        } else {
+          navigate("/buscar");
+        }
       }
     } else {
       // Propaga el error para manejo en useForm

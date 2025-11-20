@@ -1,6 +1,6 @@
 // src/context/AuthContext.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { defaultUser, adminUser } from '../data/passenger';
+import { login as apiLogin, register as apiRegister, getUserProfile, updateUserProfile } from '../utils/api';
 
 // Crea el contexto de autenticación
 const AuthContext = createContext();
@@ -19,132 +19,74 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const initializeUsers = () => {
-      const savedUsers = JSON.parse(localStorage.getItem('users') || '[]');
-      
-      // Verifica si los usuarios por defecto ya existen
-      const hasDefaultUser = savedUsers.find(u => u.correo === defaultUser.correo);
-      const hasAdminUser = savedUsers.find(u => u.correo === adminUser.correo);
-      
-      // Crea los usuarios por defecto si no existen
-      if (!hasDefaultUser || !hasAdminUser) {
-        const users = [];
-        
-        if (!hasDefaultUser) {
-          users.push(defaultUser);
-          console.log("Usuario por defecto creado:", defaultUser.correo);
-        }
-        
-        if (!hasAdminUser) {
-          users.push(adminUser);
-          console.log("Usuario administrador creado:", adminUser.correo);
-        }
-        
-        // Mantiene los usuarios existentes
-        savedUsers.forEach(existingUser => {
-          if (!users.find(u => u.correo === existingUser.correo)) {
-            users.push(existingUser);
-          }
-        });
-        
-        localStorage.setItem('users', JSON.stringify(users));
-        console.log("Base de usuarios inicializada");
-      }
-    };
-
-    initializeUsers();
-
-    // Restaura la sesión del usuario desde localStorage
-    const savedUser = localStorage.getItem('currentUser');
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
+  const fetchUserProfile = async () => {
+    try {
+      const userProfile = await getUserProfile();
+      setUser(userProfile);
+      return userProfile; // Return the user profile directly on success
+    } catch (error) {
+      logout(); // Logout on any error fetching profile (e.g., token invalid)
+      throw new Error("No se pudo obtener el perfil del usuario."); // Throw error for login function to catch
     }
-    
-    setLoading(false);
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      fetchUserProfile().finally(() => setLoading(false));
+    } else {
+      setLoading(false);
+    }
   }, []);
 
   // Función para iniciar sesión
   const login = async (email, password) => {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    const savedUsers = JSON.parse(localStorage.getItem('users') || '[]');
-    const user = savedUsers.find(u => u.correo === email && u.contrasena === password);
-    
-    if (user) {
-      const userData = {
-        documento: user.numeroDocumento,
-        nombre: `${user.primerNombre} ${user.segundoNombre || ''} ${user.primerApellido} ${user.segundoApellido || ''}`.trim().replace(/\s+/g, ' '),
-        correo: user.correo,
-        celular: user.numeroCelular,
-        nacimiento: user.fechaNacimiento,
-        rol: user.rol || 'usuario'
-      };
-      
-      setUser(userData);
-      localStorage.setItem('currentUser', JSON.stringify(userData));
-      return { success: true };
-    } else {
+    try {
+      const { token } = await apiLogin(email, password);
+      localStorage.setItem('token', token);
+      const userProfile = await fetchUserProfile(); // fetchUserProfile now throws on error
+      return { success: true, user: userProfile };
+    } catch (error) {
+      if (error.message === "No se pudo obtener el perfil del usuario.") {
+        return { success: false, error: error.message };
+      }
       return { success: false, error: "Credenciales incorrectas" };
     }
   };
 
   // Función para registrar nuevo usuario
   const register = async (userData) => {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    const savedUsers = JSON.parse(localStorage.getItem('users') || '[]');
-    
-    if (savedUsers.find(u => u.correo === userData.correo)) {
+    try {
+      await apiRegister(userData);
+      return { success: true };
+    } catch (error) {
       return { success: false, error: "El usuario ya existe" };
     }
-    
-    const newUser = { ...userData, rol: 'usuario' };
-    savedUsers.push(newUser);
-    localStorage.setItem('users', JSON.stringify(savedUsers));
-    
-    return { success: true };
   };
 
   // Función para cerrar sesión
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('currentUser');
+    localStorage.removeItem('token');
   };
 
   // Función para actualizar perfil de usuario
-  const updateProfile = (updatedData) => {
-    if (!user) return;
-    
-    const updatedUser = { ...user, ...updatedData };
-    setUser(updatedUser);
-    localStorage.setItem('currentUser', JSON.stringify(updatedUser));
-    
-    const savedUsers = JSON.parse(localStorage.getItem('users') || '[]');
-    const userIndex = savedUsers.findIndex(u => u.correo === user.correo);
-    
-    if (userIndex !== -1) {
-      const nombrePartes = updatedData.nombre.split(' ');
-      
-      savedUsers[userIndex] = { 
-        ...savedUsers[userIndex], 
-        numeroDocumento: updatedData.documento,
-        primerNombre: nombrePartes[0] || '',
-        segundoNombre: nombrePartes[1] || '',
-        primerApellido: nombrePartes[2] || '',
-        segundoApellido: nombrePartes[3] || '',
-        numeroCelular: updatedData.celular,
-        fechaNacimiento: updatedData.nacimiento,
-        correo: updatedData.correo,
-        rol: savedUsers[userIndex].rol
-      };
-      localStorage.setItem('users', JSON.stringify(savedUsers));
+  const updateProfile = async (updatedData) => {
+    if (!user) return { success: false, error: "Usuario no autenticado" };
+
+    try {
+      const updatedUser = await updateUserProfile(updatedData);
+      setUser(updatedUser);
+      return { success: true, user: updatedUser };
+    } catch (error) {
+      console.error("Error al actualizar el perfil:", error);
+      return { success: false, error: "Error al actualizar el perfil" };
     }
   };
 
   // Función para verificar si el usuario es administrador
   const isAdmin = () => {
-    return user && user.rol === 'admin';
+    return user && user.roles && user.roles.includes('ROLE_ADMIN');
   };
 
   // Valor del contexto que se provee a los componentes
