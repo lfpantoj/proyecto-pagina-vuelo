@@ -4,3 +4,6 @@ buildCommand = "cd backend/backend && ./mvnw clean install -DskipTests"
 
 [deploy]
 startCommand = "java -jar backend/backend/target/backend-0.0.1-SNAPSHOT.jar"
+
+[build.environment]
+JAVA_VERSION = "17"
