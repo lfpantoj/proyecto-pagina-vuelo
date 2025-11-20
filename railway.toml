@@ -1,17 +1,17 @@
-# railway.toml
-# Configuring a monorepo for Railway
-
 [build]
-# Use Nixpacks to automatically detect how to build each service
-builder = 'nixpacks'
+builder = "nixpacks"
+buildCommand = "cd backend/backend && ./mvnw clean package -DskipTests"
 
-# Define the backend service
-[[services]]
-name = 'backend'
-# The root directory for the backend service, relative to the repo root
-rootDir = './backend/backend'
+[deploy]
+startCommand = "cd backend/backend && java -jar target/backend-0.0.1-SNAPSHOT.jar"
+restartPolicyType = "ON_FAILURE"
 
-# Define the frontend service (for structure, even if deployed elsewhere)
-[[services]]
-name = 'frontend'
-rootDir = './frontend'
+[build.environment]
+JAVA_VERSION = "17"
+
+[deploy.healthcheck]
+path = "/api/auth/health"
+port = 8080
+timeout = 60
+interval = 30s
+retries = 5
