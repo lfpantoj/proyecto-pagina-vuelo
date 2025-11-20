@@ -1,9 +1,11 @@
 [build]
 builder = "nixpacks"
-buildCommand = "cd backend/backend && ./mvnw clean install -DskipTests"
+
+[build.nixpacks]
+path = "backend/backend"
 
 [deploy]
-startCommand = "java -jar backend/backend/target/backend-0.0.1-SNAPSHOT.jar"
+startCommand = "java -jar target/backend-0.0.1-SNAPSHOT.jar"
 
-[build.environment]
+[variables]
 NIXPACKS_JDK_VERSION = "17"
