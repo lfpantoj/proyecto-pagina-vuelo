@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://alejandra-bolanos-ldg.github.io/vuelos-colombia",
+  "homepage": "https://lfpantoj.github.io/proyecto-pagina-vuelo/",
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
