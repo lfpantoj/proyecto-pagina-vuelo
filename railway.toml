@@ -1,6 +1,6 @@
 [build]
 builder = "nixpacks"
-buildCommand = "cd backend/backend && mvn clean package -DskipTests"
+buildCommand = "apt-get update && apt-get install -y maven && cd backend/backend && mvn clean package -DskipTests"
 
 [deploy]
 startCommand = "cd backend/backend && java -jar target/backend-0.0.1-SNAPSHOT.jar"
