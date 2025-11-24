@@ -1,5 +1,4 @@
 [build]
 builder = "dockerfile"
-
-[deploy]
-# The start command is defined in the Dockerfile's ENTRYPOINT
+buildCommand = ""
+context = "."
